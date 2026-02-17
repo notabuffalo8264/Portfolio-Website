@@ -1,62 +1,120 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { ExperienceEntry } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Experience",
-  description: "Professional, research, and leadership experience.",
+  description: "Professional, research, leadership activities, and skills.",
 };
 
 const professionalExperience: ExperienceEntry[] = [
   {
-    role: "Mechanical Design Engineer",
-    org: "Advanced Systems Lab",
-    dates: "2024 — Present",
+    role: "Math Learning Center Supervisor",
+    org: "Michigan State University · East Lansing, MI",
+    dates: "September 2025 — Present",
     bullets: [
-      "Led fixture and mechanism design for thermal and growth experiments.",
-      "Standardized tolerance strategy to improve assembly repeatability.",
-      "Partnered with software team to integrate automated data capture.",
+      "Supervising MLC operations, coordinating tutors and managing resources to support student needs.",
     ],
   },
   {
-    role: "Backend Engineer (Part-Time)",
-    org: "Civic Ops Platform",
-    dates: "2023 — 2024",
+    role: "Backend Developer",
+    org: "Community Clockwork (Startup) · Chicago, IL (Remote)",
+    dates: "May 2025 — August 2025",
     bullets: [
-      "Built workflow automation services and operational APIs.",
-      "Reduced manual processing time with event-driven orchestration.",
+      "Created agentic workflows for HOA task automation using pretrained AI models, Pydantic, FastAPI, Docker, and Postgres.",
+      "Migrated from Google Cloud Functions to a Celery + Redis solution in Python.",
+    ],
+  },
+  {
+    role: "Undergraduate Learning Assistant (ULA)",
+    org: "Michigan State University · East Lansing, MI",
+    dates: "August 2024 — May 2025",
+    bullets: [
+      "Taught recitations in MTH 124 (Survey of Calculus I), providing in-class and out-of-class support.",
+    ],
+  },
+  {
+    role: "Engineering Intern",
+    org: "Jerome Resources · Plainfield, IL",
+    dates: "May 2024 — August 2024",
+    bullets: [
+      "Developed and updated CAD blueprints for company facilities.",
+      "Conducted comprehensive research to identify key sources of food waste in Chicago and Milwaukee.",
+      "Participated in a week-long site visit in Idaho to gain hands-on experience with anaerobic digestion processes, converting cow manure into renewable energy (methane).",
+      "Completed and passed a rigorous safety certification course in a professional setting with no prior preparation.",
+    ],
+  },
+  {
+    role: "Engineering Intern",
+    org: "Sloan Valve Company · Franklin Park, IL",
+    dates: "July 2022 — August 2022",
+    bullets: [
+      "Identified and resolved malfunctions in a specialized diaphragm life testing machine.",
+      "Documented wear-and-tear analysis for diaphragms undergoing testing.",
+      "Executed valve flushing procedures on various toilet bowls and processed data to compare distinctions and commonalities among different brands and models.",
     ],
   },
 ];
 
 const researchExperience: ExperienceEntry[] = [
   {
-    role: "Research Engineer",
-    org: "Materials & Thermal Research Group",
-    dates: "2022 — Present",
+    role: "Research Assistant",
+    org: "Dr. Zevalkink Group · Michigan State University",
+    dates: "August 2025 — Present",
     bullets: [
-      "Designed high-temperature fixtures and support tooling.",
-      "Developed repeatable test protocols and analysis workflows.",
-      "Produced documentation and data summaries for publication support.",
+      "Optimizing Optical Floating Zone Furnace techniques for Bi2Se3 single crystal growth.",
+      "Synthesizing and characterizing CoSb3 and Bi2Te3 single crystals for thermoelectric materials research requested by NASA.",
+    ],
+  },
+  {
+    role: "MSE 490 Independent Study",
+    org: "Michigan State University",
+    dates: "January 2025 — May 2025",
+    bullets: [
+      "Calibrated Optical Floating Zone Furnace and grew Bi2Se3 single crystals, including material preparation and XRD analysis.",
+      "Developed a user manual for an Optical Floating Zone Furnace, including mirror alignment, interface usage, and ampule-based crystal growth workflows.",
     ],
   },
 ];
 
-const leadership: ExperienceEntry[] = [
+const leadershipActivities: ExperienceEntry[] = [
   {
-    role: "Project Lead",
-    org: "Engineering Capstone Team",
-    dates: "2023 — 2024",
-    bullets: [
-      "Coordinated cross-discipline design reviews and milestone planning.",
-      "Managed technical scope and validation strategy.",
-    ],
+    role: "University Undergraduate Research and Arts Forum Presenter (UURAF)",
+    org: "Michigan State University",
+    dates: "April 2025",
+    bullets: ["Presented undergraduate research outcomes in a university forum setting."],
   },
   {
-    role: "Mentor",
-    org: "Peer Technical Mentorship Program",
-    dates: "2022 — Present",
-    bullets: ["Mentored students on CAD workflows, experiment design, and technical communication."],
+    role: "MSU Designathon Winner",
+    org: "Accessibility and Inclusion Track + Organizer's Favorite",
+    dates: "March 2025",
+    bullets: ["Awarded for solutions in accessibility and inclusion challenges."],
+  },
+  {
+    role: "Spartahack X Hackathon Winner",
+    org: "Sustainability Track (498 participants from 38 schools)",
+    dates: "February 2025",
+    bullets: ["Won sustainability track in a multi-school hackathon."],
+  },
+  {
+    role: "Executive Board Member",
+    org: "Pool Club (Registered Student Organization)",
+    dates: "November 2024 — Present",
+    bullets: ["Serving on the student organization executive board."],
+  },
+];
+
+const skillGroups = [
+  {
+    title: "Engineering & Design",
+    items: ["NX", "Fusion 360", "Abaqus", "CAD", "FEA"],
+  },
+  {
+    title: "Software & Programming",
+    items: ["Python", "Java", "C++", "MATLAB"],
+  },
+  {
+    title: "Productivity & Automation",
+    items: ["Word", "Excel", "n8n", "Agentic Workflows"],
   },
 ];
 
@@ -89,25 +147,31 @@ export default function ExperiencePage() {
     <main className="container-page space-y-10">
       <header className="space-y-3">
         <h1 className="text-4xl font-semibold tracking-tight">Experience</h1>
-        <p className="max-w-3xl text-foreground/80">Professional engineering, major projects, research contributions, and leadership activities.</p>
+        <p className="max-w-3xl text-foreground/80">Expanded experience and technical contributions beyond the one-page resume.</p>
       </header>
 
       <Timeline title="Professional Experience" entries={professionalExperience} />
+      <Timeline title="Research Experience" entries={researchExperience} />
+
+      <Timeline title="Leadership & Activities" entries={leadershipActivities} />
 
       <section className="space-y-4">
-        <h2 className="section-title">Major Projects</h2>
-        <div className="card p-5 text-sm">
-          <div className="grid gap-2 md:grid-cols-2">
-            <Link href="/projects/hoa-manager-automation-backend" className="text-accent hover:underline">HOA Manager Automation Backend</Link>
-            <Link href="/projects/thermal-fin-analysis-toolkit" className="text-accent hover:underline">Thermal Fin Analysis Toolkit</Link>
-            <Link href="/projects/key-turn-assist-prototype" className="text-accent hover:underline">Mechanism Design: Key-Turn Assist Prototype</Link>
-            <Link href="/projects/optical-floating-zone-furnace-fixture" className="text-accent hover:underline">Optical Floating Zone Furnace Ampule Growth Fixture</Link>
-          </div>
+        <h2 className="section-title">Skills</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {skillGroups.map((group) => (
+            <article key={group.title} className="card p-5">
+              <h3 className="text-base font-semibold">{group.title}</h3>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span key={item} className="rounded-full bg-surface-muted px-3 py-1 text-sm">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </article>
+          ))}
         </div>
       </section>
-
-      <Timeline title="Research Experience" entries={researchExperience} />
-      <Timeline title="Leadership / Activities" entries={leadership} />
     </main>
   );
 }
