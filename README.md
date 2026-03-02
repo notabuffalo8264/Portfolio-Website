@@ -27,8 +27,13 @@ Open http://localhost:3000
 - `content/projects/*.mdx` project content with frontmatter
 - `components/` reusable UI + MDX components
 - `lib/projects.ts` MDX content loader and sort helpers
-- `public/placeholders/` placeholder images
-- `public/resume.pdf` replaceable resume file
+- `public/projects/<project-slug>/images/` per-project thumbnails + gallery images
+- `public/projects/<project-slug>/videos/` per-project videos
+- `public/projects/<project-slug>/downloads/` per-project downloadable files
+- `public/images/profile/` about-page profile image
+- `public/downloads/resume/christopher-kopiwoda-resume.pdf` resume file
+- `docs/ASSET_ORGANIZATION.md` naming and organization guide
+- `docs/PROJECT_MDX_GUIDE.md` exact project MDX creation guide
 
 ## Add a new project
 
@@ -43,15 +48,12 @@ date: "2026-01-01"
 category: "Mechanical Engineering" # or "Software" or "Research"
 featured: true
 summary: "1-2 sentence summary"
-impact: "Single punchy impact line"
 tags: ["tag1", "tag2"]
-heroImage: "/placeholders/project-1.svg"
+heroImage: "/projects/project-slug/images/hero.webp"
 links:
 	github: "https://github.com/..."
 	demo: "https://..."
-	pdf: "/resume.pdf"
-tools: ["Tool A", "Tool B"]
-role: "Your role"
+	pdf: "/projects/project-slug/downloads/project-slug-report.pdf"
 ---
 ```
 
@@ -80,7 +82,9 @@ Example:
 
 - Name and social links: update `components/site-header.tsx` and `components/site-footer.tsx`
 - Accent color and theme tokens: update CSS variables in `app/globals.css`
-- Resume file: replace `public/resume.pdf`
+- Resume file: replace `public/downloads/resume/christopher-kopiwoda-resume.pdf`
+- Asset naming/placement rules: see `docs/ASSET_ORGANIZATION.md`
+- New project authoring format: see `docs/PROJECT_MDX_GUIDE.md`
 
 ## Build
 

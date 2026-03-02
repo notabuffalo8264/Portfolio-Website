@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+  <rect width="1200" height="800" fill="#E9EEF8"/>
+  <rect x="80" y="80" width="1040" height="640" rx="32" fill="#D9E3F7" stroke="#205FE8" stroke-width="4"/>
+  <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" fill="#205FE8">Project Placeholder 2</text>
+  <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#355A9C">Replace in /public/placeholders</text>
+</svg>

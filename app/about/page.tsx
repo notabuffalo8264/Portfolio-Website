@@ -35,7 +35,7 @@ export default function AboutPage() {
 
       <section className="grid gap-6 md:grid-cols-[220px_1fr]">
         <div className="relative h-56 overflow-hidden rounded-2xl border border-border">
-          <Image src="/placeholders/profile.svg" alt="Profile placeholder" fill className="object-cover" />
+          <Image src="/images/profile/profile.svg" alt="Profile placeholder" fill className="object-cover" />
         </div>
         <article className="card p-5">
           <h2 className="text-lg font-semibold">Roles I&apos;m Looking For</h2>

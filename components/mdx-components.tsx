@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { ImageCarousel } from "@/components/image-carousel";
+import { ImageSlideshow } from "@/components/image-slideshow";
 
 type CalloutProps = {
   title: string;
@@ -70,7 +72,9 @@ export function TechTagList({ items }: TechTagListProps) {
 
 export const mdxComponents = {
   Callout,
+  ImageCarousel,
   MetricCard,
   ImageGallery,
+  ImageSlideshow,
   TechTagList,
 };

@@ -1,0 +1,57 @@
+---
+title: "Community Clockwork: HOA Automation Backend"
+slug: "community-clockwork-hoa-automation-backend"
+date: "2025-10-02"
+category: "Software"
+featured: true
+summary: "Backend and workflow automation platform built for the Community Clockwork startup to automate HOA management operations."
+tags: ["startup", "hoa", "agentic-workflows", "backend", "automation"]
+heroImage: "/projects/community-clockwork-hoa-automation-backend/images/project-4.svg"
+links:
+  demo: "https://example.com/community-clockwork"
+---
+
+## Overview
+
+Community Clockwork was a startup project built with colleagues to modernize HOA management. The goal was to let management companies and residents interact through software that could automate routine processes end-to-end.
+
+## Problem / Constraints
+
+- HOA management work is often manual, delayed, and dependent on human manager bandwidth.
+- Resident ticket handling and vendor coordination can involve multiple handoffs.
+- Team members had limited available time due to full-time job commitments, which constrained development pace.
+
+## Approach
+
+Built an automation-first backend where resident requests could enter as tickets, trigger workflow logic, and route to the right next action automatically. 
+
+The prototype used temporary/fake vendor data and mock operational scenarios to validate the full flow, including:
+
+- ticket intake and categorization
+- automated routing logic
+- vendor notification/dispatch simulation
+- status progression through completion states
+
+## Results
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Prototype Status" value="Functional, not production-complete" />
+  <MetricCard label="Core Flows" value="Ticket + Vendor Automation Working" />
+  <MetricCard label="Current State" value="Paused" />
+</div>
+
+## Media
+
+<ImageGallery images={[{ src: "/projects/community-clockwork-hoa-automation-backend/images/project-4.svg", alt: "Community Clockwork architecture placeholder" }, { src: "/projects/community-clockwork-hoa-automation-backend/images/project-5.svg", alt: "Workflow automation placeholder" }]} />
+
+## Lessons / Next Steps
+
+This project validated that agentic workflow concepts can significantly reduce manager overhead for HOA operations, but it also highlighted execution risk when startup contributors have limited bandwidth.
+
+If resumed, next steps would be:
+
+- replace temporary vendor data with live integrations
+- harden reliability and observability for production usage
+- ship a user-ready resident and manager experience
+- define a realistic staffing model for sustained execution
+

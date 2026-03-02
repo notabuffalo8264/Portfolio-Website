@@ -19,12 +19,14 @@ export type ProjectFrontmatter = {
   category: ProjectCategory;
   featured: boolean;
   summary: string;
-  impact: string;
   tags: string[];
   heroImage: string;
+  heroAspect?: string;
+  heroFit?: "cover" | "contain";
+  heroPosition?: string;
+  cardImageFit?: "cover" | "contain";
+  cardImagePosition?: string;
   links: ProjectLinks;
-  tools: string[];
-  role: string;
 };
 
 export type Project = ProjectFrontmatter & {

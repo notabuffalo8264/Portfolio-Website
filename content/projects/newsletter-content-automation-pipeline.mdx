@@ -1,0 +1,48 @@
+---
+title: "Newsletter & Content Automation Pipeline (Agentic n8n Workflow)"
+slug: "newsletter-content-automation-pipeline"
+date: "2026-02-20"
+category: "Software"
+featured: false
+summary: "Built an n8n workflow that collects RSS feeds, ranks content by relevance, formats summaries, and sends a daily email digest via Gmail."
+tags: ["n8n", "automation", "rss", "gmail", "agentic-workflow"]
+heroImage: "/projects/newsletter-content-automation-pipeline/images/project-4.svg"
+links:
+  demo: "https://example.com/newsletter-automation"
+---
+
+## Overview
+
+Designed a personal content pipeline that runs daily and compiles relevant news into a structured email digest sent from my Gmail account to myself.
+
+## Problem / Constraints
+
+- Too many sources to manually review each day.
+- Needed filtering that matched my actual interests, not generic popularity.
+- Required a fully automated and reliable daily delivery workflow.
+
+## Approach
+
+Built an n8n flow that:
+
+- ingests RSS feeds from selected outlets
+- evaluates and ranks items by value/relevance
+- organizes and formats digest content
+- sends final output through Gmail on a recurring trigger
+
+## Results
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Cadence" value="Daily Scheduled Runs" />
+  <MetricCard label="Delivery" value="Automated Gmail Digest" />
+  <MetricCard label="Status" value="In Progress" />
+</div>
+
+## Media
+
+<ImageGallery images={[{ src: "/projects/newsletter-content-automation-pipeline/images/project-4.svg", alt: "n8n workflow placeholder" }, { src: "/projects/newsletter-content-automation-pipeline/images/project-5.svg", alt: "Digest email format placeholder" }]} />
+
+## Lessons / Next Steps
+
+Next iteration will improve ranking confidence logic, deduplication, and topic-based grouping for faster scanning.
+

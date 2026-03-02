@@ -6,11 +6,34 @@ import { Project, ProjectCategory, ProjectFrontmatter, projectCategories } from 
 
 const contentDirectory = path.join(process.cwd(), "content", "projects");
 
+function normalizeObjectPosition(value: unknown, defaultValue: string): string {
+  const raw = String(value ?? "").trim();
+  if (!raw) {
+    return defaultValue;
+  }
+
+  const parts = raw.split(/\s+/);
+  if (parts.length === 1) {
+    const token = parts[0];
+    const isKeyword = token === "left" || token === "right" || token === "top" || token === "bottom" || token === "center";
+    const isLengthOrPercent = /^-?\d+(\.\d+)?(%|px|rem|em|vh|vw)?$/.test(token);
+
+    if (!isKeyword && isLengthOrPercent) {
+      return `center ${token}`;
+    }
+  }
+
+  return raw;
+}
+
 function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFrontmatter {
   const category = frontmatter.category as ProjectCategory;
   if (!projectCategories.includes(category)) {
     throw new Error(`Invalid project category: ${String(frontmatter.category)}`);
   }
+
+  const heroFit = frontmatter.heroFit === "contain" ? "contain" : "cover";
+  const cardImageFit = frontmatter.cardImageFit === "contain" ? "contain" : "cover";
 
   return {
     title: String(frontmatter.title ?? "Untitled Project"),
@@ -19,12 +42,14 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     category,
     featured: Boolean(frontmatter.featured),
     summary: String(frontmatter.summary ?? ""),
-    impact: String(frontmatter.impact ?? ""),
     tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map(String) : [],
-    heroImage: String(frontmatter.heroImage ?? "/placeholders/project-1.svg"),
+    heroImage: String(frontmatter.heroImage ?? "/projects/_shared/images/project-placeholder.svg"),
+    heroAspect: String(frontmatter.heroAspect ?? ""),
+    heroFit,
+    heroPosition: normalizeObjectPosition(frontmatter.heroPosition, "center center"),
+    cardImageFit,
+    cardImagePosition: normalizeObjectPosition(frontmatter.cardImagePosition, "center center"),
     links: (frontmatter.links ?? {}) as ProjectFrontmatter["links"],
-    tools: Array.isArray(frontmatter.tools) ? frontmatter.tools.map(String) : [],
-    role: String(frontmatter.role ?? "Contributor"),
   };
 }
 

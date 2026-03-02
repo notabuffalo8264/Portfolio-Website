@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { mdxComponents } from "@/components/mdx-components";
@@ -49,6 +48,16 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     components: mdxComponents,
   });
 
+  const heroFitClass = project.heroFit === "contain" ? "object-contain p-2" : "object-cover";
+  const hasCustomAspect = Boolean(project.heroAspect && project.heroAspect.trim().length > 0);
+  const heroWrapperClass = hasCustomAspect
+    ? project.heroFit === "contain"
+      ? "relative w-full overflow-hidden rounded-2xl border border-border bg-surface-muted p-2"
+      : "relative w-full overflow-hidden rounded-2xl border border-border"
+    : project.heroFit === "contain"
+      ? "relative h-64 overflow-hidden rounded-2xl border border-border bg-surface-muted p-2 md:h-96"
+      : "relative h-64 overflow-hidden rounded-2xl border border-border md:h-96";
+
   return (
     <main className="container-page space-y-8">
       <header className="space-y-4">
@@ -66,50 +75,22 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </header>
 
-      <div className="relative h-64 overflow-hidden rounded-2xl border border-border md:h-96">
-        <Image src={project.heroImage} alt={project.title} fill className="object-cover" priority />
+      <div
+        className={heroWrapperClass}
+        style={hasCustomAspect ? { aspectRatio: project.heroAspect } : undefined}
+      >
+        <Image
+          src={project.heroImage}
+          alt={project.title}
+          fill
+          className={heroFitClass}
+          style={{ objectPosition: project.heroPosition }}
+          priority
+        />
       </div>
 
-      <section className="grid gap-8 lg:grid-cols-[1fr_300px] lg:items-start">
+      <section>
         <article className="mdx-content rounded-2xl border border-border bg-surface p-6">{mdx.content}</article>
-
-        <aside className="card h-fit p-5 lg:sticky lg:top-24">
-          <h2 className="text-lg font-semibold">Project Details</h2>
-          <dl className="mt-4 space-y-3 text-sm">
-            <div>
-              <dt className="text-foreground/60">Role</dt>
-              <dd>{project.role}</dd>
-            </div>
-            <div>
-              <dt className="text-foreground/60">Tools</dt>
-              <dd className="mt-1 flex flex-wrap gap-2">
-                {project.tools.map((tool) => (
-                  <span key={tool} className="rounded-full bg-surface-muted px-2.5 py-1 text-xs">
-                    {tool}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          </dl>
-
-          <div className="mt-5 flex flex-col gap-2 text-sm">
-            {project.links.github ? (
-              <Link href={project.links.github} target="_blank" rel="noreferrer" className="rounded-lg border border-border px-3 py-2 hover:bg-surface-muted">
-                GitHub
-              </Link>
-            ) : null}
-            {project.links.demo ? (
-              <Link href={project.links.demo} target="_blank" rel="noreferrer" className="rounded-lg border border-border px-3 py-2 hover:bg-surface-muted">
-                Live Demo
-              </Link>
-            ) : null}
-            {project.links.pdf ? (
-              <Link href={project.links.pdf} target="_blank" rel="noreferrer" className="rounded-lg border border-border px-3 py-2 hover:bg-surface-muted">
-                PDF
-              </Link>
-            ) : null}
-          </div>
-        </aside>
       </section>
     </main>
   );
