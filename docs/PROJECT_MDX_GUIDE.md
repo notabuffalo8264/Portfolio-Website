@@ -38,6 +38,8 @@ Use one file per project:
 title: "Project Title"
 slug: "project-slug"
 date: "2026-03-02"
+# Optional: hide project from website when true
+# inProduction: true
 category: "Research"
 featured: true
 summary: "1-2 sentence summary used on cards and on the project page intro."
@@ -53,9 +55,10 @@ heroPosition: "center 30%" # CSS object-position value
 cardImageFit: "cover"            # "cover" or "contain"
 cardImagePosition: "center center" # CSS object-position value
 
-# Optional legacy frontmatter links (currently not auto-rendered in sidebar)
+# Optional important links (rendered near top of project page)
 # links:
 #   github: "https://github.com/..."
+#   devpost: "https://devpost.com/..."
 #   demo: "https://..."
 #   pdf: "/projects/project-slug/downloads/project-slug-report.pdf"
 ---
@@ -88,6 +91,19 @@ Project cards on the all-projects screen can be controlled independently:
   - `contain` = show full image, may letterbox
 - `cardImagePosition`: thumbnail focal point when using `cover`
   - Use two values for clearer control, e.g. `"center 20%"`, `"50% 70%"`, `"left center"`
+
+Optional top links (best for software projects):
+
+- Use a `links` object in frontmatter.
+- Supported common keys: `github`, `devpost`, `demo`, `pdf`.
+- Any other link keys are also allowed and will render with auto-formatted labels.
+- If `links` is omitted, nothing is shown.
+
+Optional production-mode hide flag:
+
+- `inProduction: true` hides a project from the website while keeping the file in the codebase.
+- Default behavior (flag omitted) keeps projects visible.
+- Only add this field when you want a project hidden.
 
 ---
 

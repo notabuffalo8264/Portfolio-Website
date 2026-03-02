@@ -9,6 +9,7 @@ export type ProjectCategory = (typeof projectCategories)[number];
 export type ProjectLinks = {
   github?: string;
   demo?: string;
+  devpost?: string;
   pdf?: string;
 };
 
@@ -16,6 +17,7 @@ export type ProjectFrontmatter = {
   title: string;
   slug: string;
   date: string;
+  inProduction?: boolean;
   category: ProjectCategory;
   featured: boolean;
   summary: string;
@@ -26,7 +28,7 @@ export type ProjectFrontmatter = {
   heroPosition?: string;
   cardImageFit?: "cover" | "contain";
   cardImagePosition?: string;
-  links: ProjectLinks;
+  links?: ProjectLinks;
 };
 
 export type Project = ProjectFrontmatter & {

@@ -26,6 +26,22 @@ function normalizeObjectPosition(value: unknown, defaultValue: string): string {
   return raw;
 }
 
+function normalizeLinks(value: unknown): ProjectFrontmatter["links"] {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+
+  const entries = Object.entries(value as Record<string, unknown>)
+    .map(([key, raw]) => [key, String(raw ?? "").trim()] as const)
+    .filter(([, href]) => href.length > 0);
+
+  if (entries.length === 0) {
+    return undefined;
+  }
+
+  return Object.fromEntries(entries) as ProjectFrontmatter["links"];
+}
+
 function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFrontmatter {
   const category = frontmatter.category as ProjectCategory;
   if (!projectCategories.includes(category)) {
@@ -39,6 +55,7 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     title: String(frontmatter.title ?? "Untitled Project"),
     slug: String(frontmatter.slug ?? ""),
     date: String(frontmatter.date ?? "1970-01-01"),
+    inProduction: Boolean(frontmatter.inProduction),
     category,
     featured: Boolean(frontmatter.featured),
     summary: String(frontmatter.summary ?? ""),
@@ -49,7 +66,7 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     heroPosition: normalizeObjectPosition(frontmatter.heroPosition, "center center"),
     cardImageFit,
     cardImagePosition: normalizeObjectPosition(frontmatter.cardImagePosition, "center center"),
-    links: (frontmatter.links ?? {}) as ProjectFrontmatter["links"],
+    links: normalizeLinks(frontmatter.links),
   };
 }
 
@@ -67,7 +84,9 @@ export const getAllProjects = cache(async (): Promise<Project[]> => {
     })
   );
 
-  return projects.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return projects
+    .filter((project) => !project.inProduction)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 });
 
 export async function getFeaturedProjects(limit = 6): Promise<Project[]> {

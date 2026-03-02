@@ -5,10 +5,52 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import { mdxComponents } from "@/components/mdx-components";
 import { formatDate } from "@/lib/format";
 import { getAllProjects, getProjectBySlug } from "@/lib/projects";
+import { ProjectLinks } from "@/lib/types";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+const linkLabels: Record<string, string> = {
+  github: "GitHub",
+  demo: "Demo",
+  devpost: "Devpost",
+  pdf: "PDF",
+};
+
+function formatLinkLabel(key: string): string {
+  return key
+    .replace(/[-_]/g, " ")
+    .split(" ")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function getImportantLinks(links?: ProjectLinks) {
+  if (!links) {
+    return [];
+  }
+
+  const priority = ["github", "devpost", "demo", "pdf"] as const;
+  const seen = new Set<string>();
+  const prioritized: { key: string; href: string }[] = [];
+
+  for (const key of priority) {
+    const href = links[key];
+    if (href && href.trim()) {
+      prioritized.push({ key, href });
+    }
+  }
+
+  prioritized.forEach((item) => seen.add(item.key));
+
+  const extras = Object.entries(links)
+    .filter(([key, href]) => !seen.has(key) && Boolean(href && href.trim()))
+    .map(([key, href]) => ({ key, href: String(href) }));
+
+  return [...prioritized, ...extras];
+}
 
 export async function generateStaticParams() {
   const projects = await getAllProjects();
@@ -49,6 +91,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   });
 
   const heroFitClass = project.heroFit === "contain" ? "object-contain p-2" : "object-cover";
+  const importantLinks = getImportantLinks(project.links);
   const hasCustomAspect = Boolean(project.heroAspect && project.heroAspect.trim().length > 0);
   const heroWrapperClass = hasCustomAspect
     ? project.heroFit === "contain"
@@ -66,6 +109,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </p>
         <h1 className="text-4xl font-semibold tracking-tight">{project.title}</h1>
         <p className="max-w-3xl text-foreground/85">{project.summary}</p>
+        {importantLinks.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            {importantLinks.map((link) => (
+              <a
+                key={link.key}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-full border border-border bg-surface px-3 py-1.5 text-sm font-medium transition hover:bg-surface-muted"
+              >
+                {linkLabels[link.key] ?? formatLinkLabel(link.key)}
+              </a>
+            ))}
+          </div>
+        )}
         <div className="flex flex-wrap gap-2">
           {project.tags.map((tag) => (
             <span key={tag} className="rounded-full bg-surface-muted px-3 py-1 text-xs">

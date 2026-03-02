@@ -1,0 +1,146 @@
+---
+title: "Ghomeo"
+slug: "ghomeo"
+date: "2025-02-02"
+category: "Software"
+featured: true
+summary: "A cross-platform garden plotting and community sharing app built at SpartaHack X. Winner of the Sustainability Track."
+tags: ["spartahack-X", "hackathon", "react-native", "expo", "firebase", "mobile-app", "sustainability"]
+heroImage: "/projects/ghomeo/images/Guarden.jpeg"
+heroFit: "cover"
+heroPosition: "center center"
+cardImageFit: "cover"
+cardImagePosition: "center center"
+links:
+  github: "https://github.com/notabuffalo8264/Gnomeo"
+  devpost: "https://devpost.com/software/gomeo"
+---
+
+<Callout title="SpartaHack X – Sustainability Track Winner">
+🏆 Winner — Sustainability Track
+</Callout>
+
+### How This Started
+
+Ghomeo was inspired by the growing need for home and community gardeners to efficiently plan, organize, and manage their gardens. We saw an opportunity to build something that combines:
+
+- structured garden layout planning  
+- detailed plant tracking  
+- and a community-driven sharing ecosystem  
+
+Local gardening groups thrive when information and harvests are easily exchanged. We wanted to digitize that experience.
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Event" value="SpartaHack X" />
+  <MetricCard label="Platform" value="React Native + Expo" />
+  <MetricCard label="Award" value="Sustainability Winner" />
+</div>
+
+## What it does
+
+**Ghomeo** is a comprehensive garden plotting organizer designed for both home gardeners and community growers.
+
+Users can:
+
+- Create **custom grid-based garden layouts**
+- Track plant metadata (plant type, custom name, planting date)
+- Modify and expand plots dynamically
+- Connect through a **local map feature** to share harvests within their community
+
+It blends **personal garden management** with **local collaboration**.
+
+## Architecture & Technical Design
+
+### Frontend
+
+- Built with **React Native + Expo**
+- Modular component architecture
+- Multi-screen navigation structure
+- State management for dynamic grid updates and plant data tracking
+
+### Backend
+
+- **Firebase** for authentication and data persistence
+- Real-time synchronization of user garden data
+- Support for geolocation-based community mapping
+
+### Grid System
+
+The core feature is a **dynamic grid plotting engine**:
+
+- Customizable plot dimensions
+- Tile-based plant placement
+- Expandable garden view
+- Interactive editing via button controls and UI state changes
+
+## My Contribution
+
+I focused heavily on the **user experience and interactive systems**:
+
+- Designed and implemented the **frontend UI/UX**
+- Built and managed **button interactions and navigation logic**
+- Implemented the **dynamic garden grid system**
+- Developed the **informational pop-up tabs** for plant and layout details
+
+My primary goal was to make a complex plotting system feel intuitive and responsive for real users.
+
+## Team
+
+- **Sadie Latragna**
+- **Adam Sypitkowski**
+- **Jacob Woodworth**
+- **Christopher Kopiwoda** (me)
+
+## Challenges
+
+- Designing a **grid system** that is flexible but intuitive
+- Managing multi-file navigation flows in React Native
+- Balancing feature complexity with clean UI
+- Synchronizing state across multiple screens
+
+## What We’re Proud Of
+
+- A fully functional custom garden plotting engine
+- A community map concept connecting local gardeners
+- Hand-drawn UI elements to give the app a warm, organic aesthetic
+- Clean modular React Native architecture
+
+## What We Learned
+
+- Advanced navigation handling in React Native
+- Geolocation and real-time synchronization
+- State management for dynamic grid updates
+- Performance optimization for multi-tile layouts
+- Practical gardening knowledge (growth cycles, harvest timing, layout strategy)
+
+## What’s Next
+
+- Plant care reminders (watering, fertilization, pruning)
+- Seasonal recommendations based on user location
+- Public garden profiles
+- Event organization features
+- Real-time weather alerts and pest detection integration
+
+Our long-term vision is to make Ghomeo the go-to digital platform for gardeners, strengthening both environmental sustainability and local community connection.
+
+## UI Screenshots
+
+<ImageCarousel imagesJson='[
+  {"src":"/projects/ghomeo/images/WelcomePage.jpeg","alt":"Welcome screen with Ghomeo branding"},
+  {"src":"/projects/ghomeo/images/Login.jpeg","alt":"Login screen interface"},
+  {"src":"/projects/ghomeo/images/SignupPage.jpeg","alt":"Signup screen interface"},
+  {"src":"/projects/ghomeo/images/Guarden.jpeg","alt":"Garden grid plotting interface"},
+  {"src":"/projects/ghomeo/images/GuardanExpansion.jpg","alt":"Expanded garden view with editing controls"},
+  {"src":"/projects/ghomeo/images/Map.jpg","alt":"Community map view for nearby gardeners and sharing"}
+]' />
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">React Native</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Expo</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Firebase</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">JavaScript</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">VS Code</span>
+</div>
+

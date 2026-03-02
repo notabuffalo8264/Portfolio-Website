@@ -1,0 +1,121 @@
+---
+title: "Rate a Hack"
+slug: "rate-a-hack"
+date: "2026-02-01"
+category: "Software"
+featured: true
+summary: "A hackathon idea originality rater that compares a team’s concept against ~65.9k past Devpost/GitHub projects and returns a similarity score plus targeted suggestions to differentiate."
+tags: ["spartahack-11", "hackathon", "nlp", "embeddings", "vector-search", "faiss", "fastapi", "react", "typescript"]
+heroImage: "/projects/rate-a-hack/images/ui-customization-wizard-orb.png"
+heroAspect: "3 / 2"
+heroFit: "cover"
+heroPosition: "center center"
+cardImageFit: "cover"
+cardImagePosition: "center center"
+links:
+  github: "https://github.com/notabuffalo8264/Hackathon-Rater"
+  devpost: "https://devpost.com/software/temp-hackathon-rater"
+---
+
+### How This Started
+
+One of the hardest parts of a hackathon isn’t building — it’s figuring out whether your idea is *actually original* before you sink hours into it. We wanted a fast “sanity check” that could (1) show similar prior projects and (2) give concrete ways to differentiate.
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Projects compared" value="~65,900" />
+  <MetricCard label="Core method" value="Embeddings + FAISS" />
+  <MetricCard label="Output" value="Score + matches + suggestions" />
+</div>
+
+## What it does
+
+**Rate a Hack** takes a team’s hackathon idea and compares it against a database of past hackathon projects collected from **Devpost and GitHub**. It returns:
+
+- an **originality / similarity score**
+- a list of **closest-matching projects** (so you can see what already exists)
+- a set of **idea suggestions** to help narrow scope and differentiate the concept
+
+## How it works
+
+### Data pipeline
+
+1. Harvest project data and normalize it into a **JSONL corpus**.
+2. Convert each project into a vector representation using **SentenceTransformers embeddings**.
+3. Index the vectors with **FAISS** for fast nearest-neighbor retrieval.
+
+### Scoring + feedback loop
+
+When a user submits an idea:
+
+- the backend embeds the idea text
+- FAISS retrieves the nearest matches
+- cosine similarity is computed against those neighbors
+- an **originality score** is produced (calibrated to emphasize distinguishing concepts vs. superficial wording)
+- the system returns:
+  - the score
+  - closest matches
+  - suggestion prompts to make the idea more specific / defensible
+
+## Team
+
+Built with:
+- **jacobwoodworth Woodworth**
+- **Sypitkowski Sypitkowski**
+- **Christopher Kopiwoda** (me)
+
+## My main contribution
+
+I worked across the data pipeline and product layer of the project:
+
+- Built the project database pipeline, including the web scraping and data structuring that generated the JSONL corpus of past hackathon projects from DevPost.
+- Designed and implemented the frontend (React + TypeScript), including the character-based feedback UI, scoring display, tab system (Projects / Idea Suggestions / Customization), and overall user interaction flow.
+- Helped connect the backend and frontend, wiring API endpoints to the UI, handling request/response formatting, and ensuring idea submissions flowed cleanly from the interface to the retrieval engine and back.
+
+My focus was on making the system usable end-to-end: reliable data ingestion, a clean interface, and seamless communication between the model and the user experience.
+
+## Challenges
+
+- **Calibration:** Getting a score distribution that isn’t “everything is 80% similar” required tuning weights and focusing on concept-level uniqueness.
+- **Data collection:** Rate limits and staying within platform terms made ingestion slower and more careful than expected.
+- **User clarity:** A single number isn’t enough — it needs examples (nearest matches) and actionable suggestions to be useful.
+
+## What we’re proud of
+
+- A complete end-to-end workflow: **idea → retrieval → score → UI**.
+- A reusable JSONL dataset of prior hackathon projects.
+- A clean UI with hand-drawn character feedback and multiple modes (projects / suggestions / customization).
+
+## What’s next
+
+- Deploy on a dedicated server (not local-only).
+- Expand the dataset toward **hundreds of thousands** of projects (ideally all of Devpost).
+- Make the score more explainable (e.g., highlight which concepts/features contributed most to similarity).
+
+## Media & Documentation
+
+### UI Screenshots
+
+<ImageCarousel imagesJson='[
+  {"src":"/projects/rate-a-hack/images/ui-projects-tab.png","alt":"Projects tab showing closest matches and similarity percentages"},
+  {"src":"/projects/rate-a-hack/images/ui-idea-suggestions-tab.png","alt":"Idea Suggestions tab with prompts to narrow scope and differentiate"},
+  {"src":"/projects/rate-a-hack/images/ui-customization-wizard-orb.png","alt":"Customization tab with Wizard Orb character and 100/100 feedback example"},
+  {"src":"/projects/rate-a-hack/images/ui-customization-monocle-man.png","alt":"Customization tab with Monocle Man character feedback example"}
+]' />
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">FastAPI</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Pydantic</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Python</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">NumPy</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">pandas</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">SentenceTransformers</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">FAISS</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Cosine Similarity</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">React</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">TypeScript</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Vite</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Uvicorn</span>
+</div>
+
