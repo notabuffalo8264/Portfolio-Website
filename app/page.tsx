@@ -2,8 +2,13 @@ import Link from "next/link";
 import { ProjectCard } from "@/components/project-card";
 import { getFeaturedProjects } from "@/lib/projects";
 
-const mechanicalSkills = ["SolidWorks", "ANSYS", "GD&T", "Thermal Modeling", "Prototype Fabrication"];
-const softwareSkills = ["TypeScript", "Python", "Node.js", "Automation", "Data Pipelines"];
+const coreCompetencies = [
+  "Computer Aided Design (CAD): SolidWorks / NX / Fusion 360",
+  "Finite Element Analysis (FEA): Abaqus",
+  "Programming Languages: MATLAB, Python / Java / C++",
+  "Office 365: Word / Excel / PowerPoint / Outlook / OneNote / Teams / Word",
+  "Software Developement: Github / n8n / Agentic Workflows",
+];
 
 export default async function Home() {
   const featured = await getFeaturedProjects(6);
@@ -16,7 +21,7 @@ export default async function Home() {
           Christopher Kopiwoda
         </h1>
         <p className="max-w-3xl text-lg text-foreground/80 md:text-xl">
-          Mechanical design engineer and software builder focused on research-driven systems, automation, and prototype-to-deployment execution.
+          Mechanical Engineering major and Materials Science minor engaged in materials research, mechanical design, and software development.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link href="/projects" className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
@@ -40,20 +45,17 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-2">
-        <article className="card p-5">
-          <h3 className="text-lg font-semibold">Mechanical Engineering Tools</h3>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {mechanicalSkills.map((skill) => (
-              <span key={skill} className="rounded-full bg-surface-muted px-3 py-1 text-sm">{skill}</span>
-            ))}
+      <section>
+        <article className="card space-y-4 p-5">
+          <div>
+            <h3 className="text-lg font-semibold">Core Competencies</h3>
+            <p className="mt-1 text-sm text-foreground/70">A shortened list of my technical acpabilities.</p>
           </div>
-        </article>
-        <article className="card p-5">
-          <h3 className="text-lg font-semibold">Software Stack</h3>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {softwareSkills.map((skill) => (
-              <span key={skill} className="rounded-full bg-surface-muted px-3 py-1 text-sm">{skill}</span>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {coreCompetencies.map((competency) => (
+              <div key={competency} className="rounded-xl border border-border bg-surface-muted px-3 py-2 text-sm text-foreground/90">
+                {competency}
+              </div>
             ))}
           </div>
         </article>
@@ -61,11 +63,13 @@ export default async function Home() {
 
       <section className="card flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Let&apos;s build something meaningful.</h2>
-          <p className="mt-1 text-foreground/80">Interested in engineering, software, or applied research collaborations.</p>
+          <h2 className="text-xl font-semibold">Interested in collaborating?</h2>
+          <p className="mt-1 text-foreground/80">
+            I'm always open to opportunities in mechanical design, materials research, and software development.
+          </p>
         </div>
-        <a href="mailto:you@example.com" className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
-          Contact Me
+        <a href="mailto:your@email.com" className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
+          Get in Touch
         </a>
       </section>
     </main>
