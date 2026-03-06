@@ -106,15 +106,15 @@ const leadershipActivities: ExperienceEntry[] = [
 const skillGroups = [
   {
     title: "Engineering & Design",
-    items: ["NX", "Fusion 360", "Abaqus", "CAD", "FEA"],
+    items: ["SolidWorks (CAD)", "NX (CAD)", "Fusion 360 (CAD)", "Abaqus (FEA)", "Blender", "3D Printing", "Technical Documentation"],
   },
   {
-    title: "Software & Programming",
-    items: ["Python", "Java", "C++", "MATLAB"],
+    title: "Software Development",
+    items: ["Python", "MATLAB", "Java", "C++", "TypeScript"],
   },
   {
-    title: "Productivity & Automation",
-    items: ["Word", "Excel", "n8n", "Agentic Workflows"],
+    title: "Tools & Workflow",
+    items: ["Git", "GitHub", "VS Code", "Linux", "LaTeX", "n8n"],
   },
 ];
 

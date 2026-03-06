@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { parseProjectDate } from "@/lib/format";
 import { getAllProjects } from "@/lib/projects";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
     url: `${baseUrl}/projects/${project.slug}`,
-    lastModified: new Date(project.date),
+    lastModified: parseProjectDate(project.date),
   }));
 
   return [...staticRoutes, ...projectRoutes];

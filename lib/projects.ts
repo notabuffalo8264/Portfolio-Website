@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { cache } from "react";
 import matter from "gray-matter";
+import { parseProjectDate } from "@/lib/format";
 import { Project, ProjectCategory, ProjectFrontmatter, projectCategories } from "@/lib/types";
 
 const contentDirectory = path.join(process.cwd(), "content", "projects");
@@ -86,7 +87,7 @@ export const getAllProjects = cache(async (): Promise<Project[]> => {
 
   return projects
     .filter((project) => !project.inProduction)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    .sort((a, b) => parseProjectDate(b.date).getTime() - parseProjectDate(a.date).getTime());
 });
 
 export async function getFeaturedProjects(limit = 6): Promise<Project[]> {

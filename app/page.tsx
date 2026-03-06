@@ -3,11 +3,12 @@ import { ProjectCard } from "@/components/project-card";
 import { getFeaturedProjects } from "@/lib/projects";
 
 const coreCompetencies = [
-  "Computer Aided Design (CAD): SolidWorks / NX / Fusion 360",
+  "Computer-Aided Design (CAD): SolidWorks / NX / Fusion 360",
   "Finite Element Analysis (FEA): Abaqus",
-  "Programming Languages: MATLAB, Python / Java / C++",
-  "Office 365: Word / Excel / PowerPoint / Outlook / OneNote / Teams / Word",
-  "Software Developement: Github / n8n / Agentic Workflows",
+  "Programming: Python / MATLAB / Java / C++ / TypeScript",
+  "Automation & Systems: Git / GitHub / n8n",
+  "Experimental Methods: Materials Synthesis / Crystal Growth / XRD Analysis",
+  "Technical Documentation: LaTeX / Engineering Manuals / Research Reporting",
 ];
 
 export default async function Home() {
@@ -49,7 +50,7 @@ export default async function Home() {
         <article className="card space-y-4 p-5">
           <div>
             <h3 className="text-lg font-semibold">Core Competencies</h3>
-            <p className="mt-1 text-sm text-foreground/70">A shortened list of my technical acpabilities.</p>
+            <p className="mt-1 text-sm text-foreground/70">A shortened list of my technical capabilities.</p>
           </div>
           <div className="grid gap-2 sm:grid-cols-2">
             {coreCompetencies.map((competency) => (
