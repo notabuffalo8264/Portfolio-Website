@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
       <header className="space-y-3">
         <h1 className="text-4xl font-semibold tracking-tight">Projects</h1>
         <p className="max-w-2xl text-foreground/80">
-          A curated set of engineering, software, and research work with outcomes, tools, and implementation details.
+          A collection of projects I’ve been working on over the past few years, covering mechanical engineering, software, and research.
         </p>
       </header>
       <ProjectsBrowser projects={projects} />
