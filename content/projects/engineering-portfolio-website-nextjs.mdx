@@ -1,44 +1,67 @@
 ---
-inProduction: true
 title: "Engineering Portfolio Website (Next.js)"
 slug: "engineering-portfolio-website-nextjs"
-date: "2026-02-28"
+date: "2026-03-09"
 category: "Software"
 featured: true
-summary: "Built a modern MDX-driven portfolio website to present software, mechanical engineering, and research work in a single structured platform."
-tags: ["nextjs", "typescript", "tailwind", "mdx", "portfolio"]
-heroImage: "/projects/engineering-portfolio-website-nextjs/images/project-3.svg"
+summary: "Built a content-driven engineering portfolio website to present software, mechanical engineering, and research work in one structured, maintainable platform."
+tags: ["portfolio-website", "nextjs", "typescript", "tailwindcss", "mdx", "app-router"]
+heroImage: "/projects/engineering-portfolio-website-nextjs/images/favicon.svg"
+heroFit: "contain"
+heroPosition: "center center"
+cardImageFit: "contain"
+cardImagePosition: "center center"
 links:
-  github: "https://github.com/your-handle/portfolio-website"
+  github: "https://github.com/notabuffalo8264/Portfolio-Website"
 ---
 
-## Overview
+### How This Started
 
-This is the site you are currently viewing: a content-first engineering portfolio designed for long-term maintainability and fast project updates.
+I wanted one place to present my work across software, mechanical engineering, and research without forcing everything into a one-page resume format. Most portfolio templates were either too generic or too rigid, so I decided to build my own system around the way I actually document projects.
 
-## Problem / Constraints
-
-- Needed one place to represent software, ME, and research work cohesively.
-- Portfolio updates had to be low-friction and file-based (no CMS).
-- Site needed to be performant, clean, and easy to extend.
-
-## Approach
-
-Implemented an App Router Next.js architecture with MDX project files, reusable components, category filtering/search, and a structured asset organization strategy.
-
-## Results
+The goal was not just a nice homepage. I wanted a long-term platform where I could add new projects quickly, organize media cleanly, and keep writing technical breakdowns in a format that is easy to maintain.
 
 <div className="mt-4 grid gap-3 sm:grid-cols-3">
   <MetricCard label="Content Model" value="MDX + Frontmatter" />
-  <MetricCard label="Project Routing" value="Auto from Slugs" />
-  <MetricCard label="Status" value="Live + Iterating" />
+  <MetricCard label="Routing" value="Slug-driven project pages" />
+  <MetricCard label="Current State" value="Live and iterating" />
 </div>
 
-## Media
+## What it does
 
-<ImageGallery images={[{ src: "/projects/engineering-portfolio-website-nextjs/images/project-3.svg", alt: "Portfolio homepage placeholder" }, { src: "/projects/engineering-portfolio-website-nextjs/images/project-6.svg", alt: "Projects page placeholder" }]} />
+This site provides a structured portfolio system that:
 
-## Lessons / Next Steps
+- organizes projects by category (Software, Mechanical Engineering, Research)
+- supports search/filtering and featured project highlighting
+- separates reusable page layout from project-specific content
+- keeps media assets and downloadable files grouped per project
 
-Next improvements will focus on richer project media, downloadable artifacts per project, and finer-grained analytics/SEO tuning.
+The result is a portfolio that is easy to browse for visitors and easy to maintain as new work is completed.
+
+## How it is built
+
+### Architecture
+
+The website uses Next.js App Router with server-rendered pages and static generation for project routes. Project pages are generated from MDX files in the content directory, so each project can include rich text, metrics, media sections, and custom components.
+
+### Content workflow
+
+Each project has frontmatter metadata and body content. Frontmatter controls listing behavior, card rendering, hero image behavior, and optional top links (GitHub, demo, documents), while the MDX body holds the actual technical writeup.
+
+### Asset organization
+
+Project assets are organized under `public/projects/<slug>/` with dedicated `images`, `videos`, and `downloads` folders so media links stay predictable and easy to update.
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Next.js (App Router)</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">TypeScript</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">React</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Tailwind CSS</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">MDX</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Gray Matter</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Framer Motion</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Lucide Icons</span>
+</div>
 

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { PageTransition } from "@/components/page-transition";
+import favicon from "./favicon.svg";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,6 +23,11 @@ export const metadata: Metadata = {
     template: "%s | Christopher Kopiwoda",
   },
   description: "Mechanical engineering, software, and research portfolio.",
+  icons: {
+    icon: [{ url: favicon.src, type: "image/svg+xml" }],
+    shortcut: favicon.src,
+    apple: [{ url: favicon.src, type: "image/svg+xml" }],
+  },
   openGraph: {
     title: "Christopher Kopiwoda | Portfolio",
     description: "Mechanical engineering, software, and research portfolio.",

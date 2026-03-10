@@ -13,6 +13,7 @@ heroPosition: "center center"
 
 links:
   Report: "/projects/slider-crank-mechanism-paperweight/downloads/ME470ProjectAReport.pdf"
+  CAD Drawings: "/projects/slider-crank-mechanism-paperweight/downloads/CombinedDrawings.pdf"
 ---
 
 ## What We Built
@@ -27,7 +28,9 @@ What made the project enjoyable was that it combined several aspects of mechanic
 
 The mechanism we built is a **slider-crank system**, a common mechanical linkage used to convert rotational motion into reciprocating linear motion. Similar mechanisms appear in engines, pumps, and compressors, where rotating components drive pistons or sliding parts.
 
-Our design process started in CAD, where we developed the geometry of the mechanism and ensured that all of the parts would fit within the required baseplate footprint. The design included several key components:
+Our design process started with the four of us descussing posible designs. As we discussed our thoughts, each of us would jump in building off of one another.  Adventually we came to our design that you can see in the picutres below (although slightly alterned).
+
+Then we moved to CAD, where we developed the geometry of the mechanism and ensured that all of the parts would fit within the required baseplate footprint. The design included several key components:
 
 - A rotating crank that provides the input motion  
 - A connecting link that transfers motion through the system  
@@ -36,7 +39,7 @@ Our design process started in CAD, where we developed the geometry of the mechan
 
 Each of these components had to work together smoothly so that a full rotation of the crank would produce a full reciprocating cycle of the slider.
 
-Because the mechanism was intended to operate smoothly and continuously, we also analyzed how the geometry of the system would affect its motion and efficiency.
+To better understand how the geometry affected the motion, I wrote a MATLAB program to analyze the kinematics of the slider-crank mechanism. This allowed us to evaluate different arm lengths and quickly see how those changes affected the slider motion and transmission angle, helping the team choose dimensions that produced smooth and consistent movement.
 
 ## Building the Parts
 
@@ -48,7 +51,7 @@ Some parts were manufactured using standard machining processes in the manufactu
 - milling
 - cutting stock material to size
 
-Other parts, particularly those with more complicated geometry, were produced using **3D printing**. This allowed us to create shapes that would have been difficult or time-consuming to machine manually.
+Other parts, particularly those with more complicated geometry, were produced using **3D printing**. This allowed us to create shapes that would have been difficult or time-consuming to machine manually. Especially the "Anchor" seen in the images below which was purely for its visual appeal.
 
 After the individual components were completed, we assembled the mechanism and tested its motion. The final build was able to rotate smoothly through a full cycle, producing consistent sliding motion along the track.
 
@@ -60,15 +63,15 @@ One example involved the geometry of the slider track. Our initial design used a
 
 To solve this, we redesigned the track using a simpler T-shaped geometry. This preserved the functional requirements of the mechanism while allowing the part to be manufactured using standard milling operations.
 
-This redesign was a good reminder that **successful mechanical design requires balancing creativity with manufacturability**.
+We also ran into trouble with many of the 3D prints. While 3D printing allows for almost limitless geometries, the dimensional tolerances are difficult to control compared to machining. This forced us to rely on trial and error to achieve a tight fit, resulting in many of the failed prints shown in the Physical Build Photos section.
 
-## My Contribution (CHANGE)
+## My Contribution
 
-This project was one of the most hands-on design experiences in the course. It required our team to move through the entire engineering workflow — from concept and CAD modeling to manufacturing and assembly.
+My primary contributions were focused on the CAD design and manufacturing of the mechanism. I handled the CAD revisions as the design evolved, updating the models and drawings as we refined the geometry and simplified parts to better match what could realistically be manufactured in the lab.
 
-Working through the process made it clear how closely design decisions are tied to manufacturing constraints. A design that looks good on paper is not always practical to build, and small adjustments to geometry can make a large difference in how easy a part is to manufacture.
+I also wrote a MATLAB program used to analyze the kinematics of the slider-crank mechanism. The script allowed us to evaluate different crank and connecting-rod lengths by calculating slider displacement, transmission angle, and other motion characteristics across a full crank rotation. This made it much easier for the team to compare different design options and select arm dimensions that would produce smooth and consistent motion.
 
-It was also a great team project. Each member contributed to different parts of the design and build process, and seeing the mechanism come together at the end made the project especially satisfying.
+In the manufacturing phase, I helped machine most of the parts in the lab, performing operations such as drilling and milling, and then helped assemble the final mechanism once all of the components were completed.
 
 ## Team
 - Devin Grady
@@ -91,7 +94,8 @@ It was also a great team project. Each member contributed to different parts of 
   {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Side1.png","alt":"Side view of the assembled slider-crank mechanism paperweight"},
   {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Side2.png","alt":"Opposite side view of the assembled slider-crank mechanism paperweight"},
   {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Front.png","alt":"Front view of the assembled slider-crank mechanism paperweight"},
-  {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Back.png","alt":"Rear view of the assembled slider-crank mechanism paperweight"}
+  {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Back.png","alt":"Rear view of the assembled slider-crank mechanism paperweight"},
+  {"src":"/projects/slider-crank-mechanism-paperweight/images/Physical/Failed3DPrints.jpeg","alt":"Failed slider-crank 3D prints"}
 ]' />
 
 ### CAD Motion Video
@@ -131,5 +135,6 @@ It was also a great team project. Each member contributed to different parts of 
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">3D Printing</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Manual Machining</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Mechanical Assembly</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">MATLAB</span>
 </div>
 
