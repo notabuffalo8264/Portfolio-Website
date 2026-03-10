@@ -41,4 +41,8 @@ export type ExperienceEntry = {
   dates: string;
   bullets: string[];
   links?: { label: string; href: string }[];
+  projectSlug?: string;
+  projectLabel?: string;
+  projectSlug2?: string;
+  projectLabel2?: string;
 };
