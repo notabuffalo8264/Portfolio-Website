@@ -1,0 +1,1018 @@
+{
+  "name": "Auto Todoist",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b27b9f0b-8f31-42e1-92f7-a7c4f945851b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://d2l.msu.edu/d2l/le/calendar/feed/user/feed.ics?token=a57usskwr0rm9iau6b084",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        0
+      ],
+      "id": "1007769c-f462-41c0-90d9-f7080e3d9561",
+      "name": "Fetch ICS"
+    },
+    {
+      "parameters": {
+        "jsCode": "// The HTTP node put the raw ICS text into $json.data\nconst icsText = $json.data;\n\n// --- tiny ICS parser (VEVENT only) ---\nfunction unfoldLines(s){\n  const lines = s.replace(/\\r/g,'').split('\\n');\n  const out = [];\n  for (let i=0;i<lines.length;i++){\n    const L = lines[i];\n    if (i>0 && (L.startsWith(' ') || L.startsWith('\\t'))) {\n      out[out.length-1] += L.slice(1);\n    } else out.push(L);\n  }\n  return out;\n}\n\nfunction icsToISO(s){\n  if (!s) return null;\n  if (/^\\d{8}T\\d{6}Z$/.test(s)) {\n    const yyyy=s.slice(0,4), mm=s.slice(4,6), dd=s.slice(6,8);\n    const hh=s.slice(9,11), mi=s.slice(11,13), ss=s.slice(13,15);\n    return new Date(Date.UTC(+yyyy,+mm-1,+dd,+hh,+mi,+ss)).toISOString();\n  }\n  if (/^\\d{8}$/.test(s)) {\n    const yyyy=s.slice(0,4), mm=s.slice(4,6), dd=s.slice(6,8);\n    return new Date(+yyyy,+mm-1,+dd).toISOString();\n  }\n  const d = new Date(s);\n  return isNaN(d) ? null : d.toISOString();\n}\n\nconst lines = unfoldLines(icsText);\nconst events = [];\nlet cur = null;\n\nfor (const line of lines){\n  if (line === 'BEGIN:VEVENT') cur = {};\n  else if (line === 'END:VEVENT'){ if (cur) events.push(cur); cur = null; }\n  else if (cur){\n    const idx = line.indexOf(':'); if (idx === -1) continue;\n    const rawKey = line.slice(0, idx);\n    const val = line.slice(idx+1);\n    const key = rawKey.split(';')[0].toUpperCase();\n    if (['UID','SUMMARY','DESCRIPTION','LOCATION','DTSTART','DTEND','DTSTAMP','URL'].includes(key)){\n      cur[key] = val;\n    }\n  }\n}\n\n// map to clean JSON\nconst out = events.map(ev => ({\n  uid: ev.UID || null,\n  title: ev.SUMMARY || '',\n  description: ev.DESCRIPTION || '',\n  location: ev.LOCATION || '',\n  startsAt: icsToISO(ev.DTSTART || null),\n  endsAt: icsToISO(ev.DTEND || null),\n  url: ev.URL || ''\n}));\n\nreturn out.map(e => ({ json: e }));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ],
+      "id": "eae1f481-eee2-4921-aa14-cb6a6ca8b661",
+      "name": "Parse ICS"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Simple deterministic string hash (32-bit then hex)\nfunction simpleHash(str) {\n  let h = 0;\n  for (let i = 0; i < str.length; i++) h = Math.imul(31, h) + str.charCodeAt(i) | 0;\n  return (h >>> 0).toString(16);\n}\n\nfunction isAssignmentish(title, description) {\n  const text = `${title} ${description}`.toLowerCase();\n  const keywords = ['assignment','homework','hw','quiz','exam','project','lab','report','due'];\n  return keywords.some(k => text.includes(k));\n}\n\nfunction extractSubmitLink(desc = '') {\n  // Convert any literal \"\\n\" sequences into real newlines\n  const normalized = String(desc).replace(/\\\\n/g, '\\n');\n  const m = normalized.match(/https:\\/\\/d2l\\.msu\\.edu\\/d2l\\/lms\\/dropbox\\/user\\/folder_submit_files[^\\s]+/);\n  return m ? m[0] : 'No Submission Link Available';\n}\n\nconst results = [];\n\nfor (const item of items) {\n  const e = item.json;\n  const title = e.title || '';\n  const desc  = e.description || '';\n\n  if (!isAssignmentish(title, desc)) continue;\n\n  const uid = e.uid || `${title}|${e.startsAt || ''}`;\n  const uidHash = simpleHash(uid);\n  const due = e.startsAt || e.endsAt || null;\n\n  results.push({\n    json: {\n      uid,\n      uidHash,\n      todoTitle: title.trim(),\n      due,\n      sourceUrl: e.url || '',\n      notes: extractSubmitLink(desc),   // ✅ link or fallback text\n      courseLabel: e.courseLabel || null\n    }\n  });\n}\n\nreturn results;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "f127c199-02a1-4a0f-bcdc-d401dc9f3b46",
+      "name": "Normalize & Fingerprint"
+    },
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "2359229162",
+          "mode": "list",
+          "cachedResultName": "Inbox"
+        },
+        "labels": "={{ \n  ['From:n8n']                                // always include this\n    .concat($json.labels || [])               // keep any pre-set labels if you add them upstream\n    .concat($json.courseLabel ? [$json.courseLabel] : []) // add class label if present\n    .filter(Boolean)                          // remove empty/null\n    .filter((v,i,a) => a.indexOf(v) === i)    // dedupe\n}}",
+        "content": "={{$json.contentWithUID}}",
+        "options": {
+          "description": "={{ $json.notes || '' }}",
+          "dueDateTime": "={{$json.due}}",
+          "section": "201354931"
+        }
+      },
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.1,
+      "position": [
+        1792,
+        -96
+      ],
+      "id": "33426eca-e468-4813-8dfd-08e406634bb5",
+      "name": "Create Task",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "taskId": "={{$json.task_id}}",
+        "updateFields": {
+          "content": "={{$json.contentWithUID}}",
+          "description": "={{ $json.notes || '' }}",
+          "dueDateTime": "={{$json.due}}",
+          "labels": "={{ \n  ['From:n8n']\n    .concat($json.labels || [])\n    .concat($json.courseLabel ? [$json.courseLabel] : [])\n    .filter(Boolean)\n    .filter((v,i,a) => a.indexOf(v) === i)\n}}"
+        }
+      },
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.1,
+      "position": [
+        1792,
+        128
+      ],
+      "id": "3c8d48dc-4c73-4dfe-8d42-fd2fc7469e3c",
+      "name": "Update Task",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const DAYS_AHEAD = 14;\nconst INCLUDE_PAST_DAYS = 0;\n\nfunction inWindow(iso) {\n  if (!iso) return false;\n  const now = new Date();\n  const start = new Date(now.getTime() - INCLUDE_PAST_DAYS * 24 * 60 * 60 * 1000);\n  const end   = new Date(now.getTime() + DAYS_AHEAD * 24 * 60 * 60 * 1000);\n  const d = new Date(iso);\n  return d >= start && d <= end;\n}\n\nconst out = [];\n\nfor (const { json: e } of items) {\n  const due = e.startsAt || e.endsAt || null;\n\n  // ✅ Must be in date window AND title contains \"- Due\"\n  if (inWindow(due) && typeof e.title === \"string\" && e.title.includes(\"- Due\")) {\n    out.push({ json: e });\n  }\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "d42fd36b-2d00-4197-85df-423d0ffae2ac",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * INPUT: items[] from Todoist active-tasks node\n *  - Each item should have at least: { id || task_id, content, description }\n *\n * OUTPUT: one item:\n *  { idByHash: { [uidHashLower]: String(task_id) } }\n */\n\nconst UID_VISIBLE_RE = /\\[uid:([a-f0-9]{8})\\]/i;\n\n// Zero-width mapping (base-4 alphabet)\nconst ZW = ['\\u200B', '\\u200C', '\\u200D', '\\u2060'];\nconst START = '\\u2063';\nconst END   = '\\u2062';\n\nfunction decodeInvisibleUID(str) {\n  if (!str) return null;\n  const startIdx = str.indexOf(START);\n  if (startIdx === -1) return null;\n  const endIdx = str.indexOf(END, startIdx + 1);\n  if (endIdx === -1) return null;\n  const payload = str.slice(startIdx + START.length, endIdx);\n  if (!payload) return null;\n\n  const base4 = [];\n  for (const ch of payload) {\n    const d = ZW.indexOf(ch);\n    if (d === -1) return null;\n    base4.push(d);\n  }\n  if (base4.length % 2 !== 0) return null;\n\n  const hex = [];\n  for (let i = 0; i < base4.length; i += 2) {\n    const val = base4[i] * 4 + base4[i + 1];\n    hex.push(val.toString(16));\n  }\n  const out = hex.join('').toLowerCase();\n  return /^[0-9a-f]{8}$/.test(out) ? out : null;\n}\n\nconst idByHash = {};\n\nfor (const { json } of items) {\n  const taskId = String(json.id ?? json.task_id ?? '');\n  if (!taskId) continue;\n\n  const content = String(json.content || '');\n  const description = String(json.description || '');\n\n  let uid =\n    decodeInvisibleUID(content) ||\n    (content.match(UID_VISIBLE_RE)?.[1]?.toLowerCase()) ||\n    (description.match(UID_VISIBLE_RE)?.[1]?.toLowerCase()) ||\n    null;\n\n  if (uid) idByHash[uid] = taskId;\n}\n\nreturn [{ json: { idByHash } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        -160
+      ],
+      "id": "c930b7e9-323a-4ef8-8977-c8c7a74c7792",
+      "name": "Index Active"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Plan Actions (stateless, Pattern A)\n *\n * Inputs (merged):\n *  - Many \"assignment\" items having { uidHash, todoTitle, due, notes, sourceUrl }\n *  - One item having { idByHash } from Index Active\n *  - One item having { completedByHash } from Index Completed\n *  - (Optional, from Restore Webhook path) { forceRecreate: true }\n *\n * Output:\n *  - For each assignment: route in {create|update|skip_completed}\n *    and include task_id when updating.\n */\n\nlet idByHash = {};\nlet completedByHash = {};\nconst assignments = [];\nlet forceRecreate = false; // <- ephemeral flag injected by webhook execution\n\n// Separate payloads\nfor (const it of items) {\n  const j = it.json || {};\n  if (j.idByHash && typeof j.idByHash === 'object') {\n    idByHash = j.idByHash;\n  } else if (j.completedByHash && typeof j.completedByHash === 'object') {\n    completedByHash = j.completedByHash;\n  } else if (j.uidHash) {\n    assignments.push(j);\n  } else if (j.forceRecreate === true) {\n    forceRecreate = true;\n  }\n}\n\nconst out = [];\n\nfor (const a of assignments) {\n  const hash = String(a.uidHash || '').toLowerCase();\n\n  // Normal mode: skip if previously completed\n  // Force mode: DO NOT skip\n  if (!forceRecreate && completedByHash[hash]) {\n    out.push({ json: { ...a, route: 'skip_completed' } });\n    continue;\n  }\n\n  const activeId = idByHash[hash];\n\n  if (activeId) {\n    // Idempotent update\n    out.push({ json: { ...a, task_id: activeId, route: 'update' } });\n  } else {\n    out.push({ json: { ...a, route: 'create' } });\n  }\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1312,
+        16
+      ],
+      "id": "472ab556-92c2-4757-b1f0-f08bacf8aae7",
+      "name": "Plan Actions"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.route}}",
+                    "rightValue": "create",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "b27a31f3-44b1-4746-824d-33996871a44a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "bfd52f78-2b17-4649-8124-64fbf9e0afd4",
+                    "leftValue": "={{$json.route}}",
+                    "rightValue": "update",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1472,
+        16
+      ],
+      "id": "56d0f35a-644f-47f5-a33e-b82ba5437cda",
+      "name": "Route by Action"
+    },
+    {
+      "parameters": {
+        "url": "https://api.todoist.com/sync/v9/completed/get_all",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "todoistApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "project_id",
+              "value": "2359229162"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            },
+            {
+              "name": "since",
+              "value": "={{ $now.minus({ weeks: 2 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        160
+      ],
+      "id": "0e21ebed-805e-4204-9e8d-43415896c690",
+      "name": "Get Completed",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false,
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * INPUT: EITHER\n *  A) One item whose json is the full /completed/get_all object:\n *     { items: [...], projects: {...}, sections: {...} }\n *  B) Many items where each json IS a completed item (if split upstream)\n *\n * OUTPUT: one item:\n *  { completedByHash: { [uidHashLower]: true } }\n */\n\nconst UID_VISIBLE_RE = /\\[uid:([a-f0-9]{8})\\]/i;\n\n// Zero-width mapping (base-4 alphabet)\nconst ZW = ['\\u200B', '\\u200C', '\\u200D', '\\u2060'];\nconst START = '\\u2063';\nconst END   = '\\u2062';\n\nfunction decodeInvisibleUID(str) {\n  if (!str) return null;\n  const s = String(str);\n  const i = s.indexOf(START);\n  if (i === -1) return null;\n  const j = s.indexOf(END, i + 1);\n  if (j === -1) return null;\n  const payload = s.slice(i + START.length, j);\n  if (!payload) return null;\n\n  const base4 = [];\n  for (const ch of payload) {\n    const d = ZW.indexOf(ch);\n    if (d === -1) return null;\n    base4.push(d);\n  }\n  if (base4.length % 2 !== 0) return null;\n\n  let hex = '';\n  for (let k = 0; k < base4.length; k += 2) {\n    const val = base4[k] * 4 + base4[k + 1]; // 0..15\n    hex += val.toString(16);\n  }\n  return /^[0-9a-f]{8}$/.test(hex) ? hex : null;\n}\n\nfunction* iterRows(inputItems) {\n  for (const it of inputItems) {\n    const j = it.json || {};\n    if (Array.isArray(j.items)) {\n      for (const row of j.items) yield row;   // unwrap wrapper\n    } else {\n      yield j; // already a row\n    }\n  }\n}\n\nconst completedByHash = {};\n\nfor (const row of iterRows(items)) {\n  const content = String(row.content || '');\n  const description = String(row.description || ''); // usually absent\n\n  const invisible = decodeInvisibleUID(content);\n  const visible =\n    (content.match(UID_VISIBLE_RE)?.[1]) ||\n    (description.match(UID_VISIBLE_RE)?.[1]) ||\n    null;\n\n  const uid = (invisible || visible || '').toLowerCase();\n  if (uid) completedByHash[uid] = true;\n}\n\nreturn [{ json: { completedByHash } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        560,
+        160
+      ],
+      "id": "cfcdea02-4ee1-4e95-ac28-cdf1afa97d24",
+      "name": "Index Completed"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "filters": {
+          "labelId": "From:n8n",
+          "projectId": "2359229162",
+          "sectionId": "201354931"
+        }
+      },
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        -160
+      ],
+      "id": "89d5f3cd-8b58-4f0b-81f8-0d02c749c0bb",
+      "name": "Get Active",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "restore-d2l",
+        "options": {
+          "noResponseBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -352,
+        0
+      ],
+      "id": "be8d39ca-1f6b-46d1-9ea3-a16b74d37ea6",
+      "name": "Webhook",
+      "webhookId": "595f81af-f93b-463f-b836-ab498e3d7784"
+    },
+    {
+      "parameters": {
+        "content": "## Webhook Test Link:\nhttps://n8n.srv993689.hstgr.cloud/webhook-test/restore-d2l?token=TiAC1mOUFtvj\n\n## Webhook Production Link\nhttps://n8n.srv993689.hstgr.cloud/webhook/restore-d2l?token=TiAC1mOUFtvj",
+        "height": 208,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -368,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "a6325abd-22a2-498c-9bb1-2bd57a8eb8a7",
+      "name": "Sticky Note",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "527d8edf-948d-4b34-81ac-1f36c4b1cb34",
+              "leftValue": "={{$json.query.token}}",
+              "rightValue": "TiAC1mOUFtvj",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        336
+      ],
+      "id": "f9e1ce70-3c06-46bf-a3aa-e963122fc3f8",
+      "name": "Auth Token"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "159343d6-771e-4595-b4ec-2cd11751eb92",
+              "name": "forceRecreate",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        320
+      ],
+      "id": "7545ad75-e17a-452d-afa8-ff4332b99d40",
+      "name": "Force Recreate"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "projectId": "2359229162",
+          "sectionId": "201354931"
+        }
+      },
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.1,
+      "position": [
+        2112,
+        16
+      ],
+      "id": "6be8712a-31d3-42d6-9683-df562f547166",
+      "name": "Search Tasks",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Input: array of Todoist tasks (Search Tasks)\n * Output: one item with { commands } for Sync API item_reorder\n *\n * Sort: newest due → oldest due → no due\n */\nfunction toMillis(due) {\n  if (!due) return null;\n  // Prefer due.datetime, else due.date at 23:59:59 to keep “date-only” comparable\n  if (due.datetime) return Date.parse(due.datetime);\n  if (due.date) return Date.parse(due.date + 'T23:59:59Z');\n  return null;\n}\n\nconst tasks = items.map(i => i.json);\n\n// Sort asc by due-millis (nulls last) ⇒ closest → furthest → none\ntasks.sort((a, b) => {\n  const A = toMillis(a.due);\n  const B = toMillis(b.due);\n  if (A === null && B === null) return 0;\n  if (A === null) return 1;   // A (no date) goes after B\n  if (B === null) return -1;  // B (no date) goes after A\n  return A - B; // smaller millis (earlier/closer) first\n});\n\n// Build items → child_order\nconst itemsArg = tasks.map((t, idx) => ({\n  id: String(t.id),\n  child_order: idx + 1\n}));\n\n// Minimal UUID generator\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst cmd = {\n  type: \"item_reorder\",\n  uuid: uuidv4(),\n  args: { items: itemsArg }\n};\n\nreturn [{ json: { commands: [cmd] } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        16
+      ],
+      "id": "4d731d3a-ce63-4013-a4e9-68f72e1818df",
+      "name": "Build Reorder List"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.todoist.com/sync/v9/sync",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "todoistApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "commands",
+              "value": "={{ JSON.stringify($json.commands) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2432,
+        16
+      ],
+      "id": "6b76eeb7-2d7d-4f49-9bca-0b5e2cc91447",
+      "name": "Item Reorder",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1152,
+        -16
+      ],
+      "id": "79065ad4-7b7a-40fb-8b70-0cc93db3b5a3",
+      "name": "Merge 1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1952,
+        16
+      ],
+      "id": "820f4bda-8f19-4579-b608-f7a3ec17055d",
+      "name": "Merge 2"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * INPUT: items[] with { todoTitle, uidHash }\n * OUTPUT: same items, adding { contentWithUID } built from CLEANED title + invisible UID\n */\n\nconst ZW = ['\\u200B', '\\u200C', '\\u200D', '\\u2060']; // base-4 alphabet\nconst START = '\\u2063'; // INVISIBLE SEPARATOR\nconst END   = '\\u2062'; // INVISIBLE TIMES\n\nfunction encodeInvisibleUID(uidHex) {\n  const uid = String(uidHex || '').toLowerCase();\n  if (!/^[0-9a-f]{8}$/.test(uid)) return '';\n  const outChars = [];\n  for (const h of uid) {\n    const n = parseInt(h, 16);\n    const hi = Math.floor(n / 4);\n    const lo = n % 4;\n    outChars.push(ZW[hi], ZW[lo]);\n  }\n  return START + outChars.join('') + END;\n}\n\n// strip \" - Due\" / \"– Due\" (case-insensitive), collapse spaces, trim\nfunction cleanTitle(s) {\n  if (typeof s !== 'string') return s;\n  return s\n    .replace(/\\s*[-–]\\s*due\\b/i, '')\n    .replace(/\\s{2,}/g, ' ')\n    .trim();\n}\n\nconst out = [];\nfor (const { json } of items) {\n  const base = String(json.todoTitle || '');\n  const clean = cleanTitle(base);\n  const enc = encodeInvisibleUID(json.uidHash);\n  out.push({ json: { ...json, contentWithUID: clean + enc } });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        -96
+      ],
+      "id": "b9222758-e8fb-44c7-9701-d083f48cad8c",
+      "name": "Format (Create)"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * INPUT: items[] with { todoTitle, uidHash }\n * OUTPUT: same items, adding { contentWithUID } built from CLEANED title + invisible UID\n */\n\nconst ZW = ['\\u200B', '\\u200C', '\\u200D', '\\u2060']; // base-4 alphabet\nconst START = '\\u2063'; // INVISIBLE SEPARATOR\nconst END   = '\\u2062'; // INVISIBLE TIMES\n\nfunction encodeInvisibleUID(uidHex) {\n  const uid = String(uidHex || '').toLowerCase();\n  if (!/^[0-9a-f]{8}$/.test(uid)) return '';\n  const outChars = [];\n  for (const h of uid) {\n    const n = parseInt(h, 16);\n    const hi = Math.floor(n / 4);\n    const lo = n % 4;\n    outChars.push(ZW[hi], ZW[lo]);\n  }\n  return START + outChars.join('') + END;\n}\n\n// strip \" - Due\" / \"– Due\" (case-insensitive), collapse spaces, trim\nfunction cleanTitle(s) {\n  if (typeof s !== 'string') return s;\n  return s\n    .replace(/\\s*[-–]\\s*due\\b/i, '')\n    .replace(/\\s{2,}/g, ' ')\n    .trim();\n}\n\nconst out = [];\nfor (const { json } of items) {\n  const base = String(json.todoTitle || '');\n  const clean = cleanTitle(base);\n  const enc = encodeInvisibleUID(json.uidHash);\n  out.push({ json: { ...json, contentWithUID: clean + enc } });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1632,
+        128
+      ],
+      "id": "2e4b4e5e-cd9e-457d-819b-74836ce3a8fe",
+      "name": "Format (Update)"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Extract a course code from TITLE or LOCATION and attach:\n *  - courseLabel  (e.g., \"MSE-320\") -> for Todoist labels\n *  - coursePretty (e.g., \"MSE 320\") -> optional for title prefix\n */\nfunction extractCourseFrom(title = '', location = '') {\n  const T = String(title).toUpperCase();\n  let L = String(location).toUpperCase();\n\n  // Strip leading term prefix like FS25-, SS25-, FA24-, SP26- from LOCATION\n  L = L.replace(/^(FS|SS|FA|SP)\\d{2}-/, '');\n\n  // Pattern: DEPT (2–4 letters) + optional hyphen/space + NUMBER (3–4 digits + optional letter)\n  const RX = /\\b([A-Z]{2,4})[-\\s]?(\\d{3,4}[A-Z]?)\\b/;\n\n  let m = T.match(RX);\n  if (!m) m = L.match(RX);\n  if (!m) return { label: null, pretty: null };\n\n  const dept = m[1];\n  const num  = m[2];\n  return {\n    label: `${dept}-${num}`,   // Capitalized label, e.g. \"MSE-320\"\n    pretty: `${dept} ${num}`   // Pretty with space, e.g. \"MSE 320\"\n  };\n}\n\nreturn items.map(i => {\n  const j = i.json || {};\n  const { label, pretty } = extractCourseFrom(j.title || '', j.location || '');\n  j.courseLabel = label;\n  j.coursePretty = pretty;\n  return { json: j };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "2a50333f-9b6b-4b34-95cd-5c8e5649a85b",
+      "name": "Label"
+    },
+    {
+      "parameters": {
+        "path": "restore-order",
+        "options": {
+          "noResponseBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        944,
+        336
+      ],
+      "id": "95d4607f-6205-486a-9d0d-c12ad160b236",
+      "name": "Webhook1",
+      "webhookId": "595f81af-f93b-463f-b836-ab498e3d7784"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "527d8edf-948d-4b34-81ac-1f36c4b1cb34",
+              "leftValue": "={{$json.query.token}}",
+              "rightValue": "TiAC1mOUFtvj",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1104,
+        336
+      ],
+      "id": "c255c85a-93a0-4e8c-9b1e-37887e92e860",
+      "name": "Auth Token1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "projectId": "2359229162",
+          "sectionId": "201354931"
+        }
+      },
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        320
+      ],
+      "id": "399aba76-0477-4066-b42e-3d26650d7229",
+      "name": "Search Tasks1",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * Input: array of Todoist tasks (Search Tasks)\n * Output: one item with { commands } for Sync API item_reorder\n *\n * Sort: newest due → oldest due → no due\n */\nfunction toMillis(due) {\n  if (!due) return null;\n  // Prefer due.datetime, else due.date at 23:59:59 to keep “date-only” comparable\n  if (due.datetime) return Date.parse(due.datetime);\n  if (due.date) return Date.parse(due.date + 'T23:59:59Z');\n  return null;\n}\n\nconst tasks = items.map(i => i.json);\n\n// Sort asc by due-millis (nulls last) ⇒ closest → furthest → none\ntasks.sort((a, b) => {\n  const A = toMillis(a.due);\n  const B = toMillis(b.due);\n  if (A === null && B === null) return 0;\n  if (A === null) return 1;   // A (no date) goes after B\n  if (B === null) return -1;  // B (no date) goes after A\n  return A - B; // smaller millis (earlier/closer) first\n});\n\n// Build items → child_order\nconst itemsArg = tasks.map((t, idx) => ({\n  id: String(t.id),\n  child_order: idx + 1\n}));\n\n// Minimal UUID generator\nfunction uuidv4() {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n}\n\nconst cmd = {\n  type: \"item_reorder\",\n  uuid: uuidv4(),\n  args: { items: itemsArg }\n};\n\nreturn [{ json: { commands: [cmd] } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1424,
+        320
+      ],
+      "id": "d22a2c5d-dc38-49b0-8d40-7bc00abc48e2",
+      "name": "Build Reorder List1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.todoist.com/sync/v9/sync",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "todoistApi",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "commands",
+              "value": "={{ JSON.stringify($json.commands) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        320
+      ],
+      "id": "f846f87c-c08d-4800-bc03-aa18fd8c2c76",
+      "name": "Item Reorder1",
+      "credentials": {
+        "todoistApi": {
+          "id": "S0oq4HYur1oy6332",
+          "name": "Todoist Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Webhook Test Link:\nhttps://n8n.srv993689.hstgr.cloud/webhook-test/restore-order?token=TiAC1mOUFtvj\n\n## Webhook Production Link\nhttps://n8n.srv993689.hstgr.cloud/webhook/restore-order?token=TiAC1mOUFtvj",
+        "height": 208,
+        "width": 320
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1312,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "a3359c30-60b5-4834-976f-df2c78616555",
+      "name": "Sticky Note1",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch ICS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Completed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch ICS": {
+      "main": [
+        [
+          {
+            "node": "Parse ICS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse ICS": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize & Fingerprint": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Create Task": {
+      "main": [
+        [
+          {
+            "node": "Merge 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Label",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Index Active": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Plan Actions": {
+      "main": [
+        [
+          {
+            "node": "Route by Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Task": {
+      "main": [
+        [
+          {
+            "node": "Merge 2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Route by Action": {
+      "main": [
+        [
+          {
+            "node": "Format (Create)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format (Update)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Completed": {
+      "main": [
+        [
+          {
+            "node": "Index Completed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Index Completed": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Get Active": {
+      "main": [
+        [
+          {
+            "node": "Index Active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Auth Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Completed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch ICS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auth Token": {
+      "main": [
+        [
+          {
+            "node": "Force Recreate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Force Recreate": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Search Tasks": {
+      "main": [
+        [
+          {
+            "node": "Build Reorder List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reorder List": {
+      "main": [
+        [
+          {
+            "node": "Item Reorder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge 1": {
+      "main": [
+        [
+          {
+            "node": "Plan Actions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge 2": {
+      "main": [
+        [
+          {
+            "node": "Search Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format (Create)": {
+      "main": [
+        [
+          {
+            "node": "Create Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format (Update)": {
+      "main": [
+        [
+          {
+            "node": "Update Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Label": {
+      "main": [
+        [
+          {
+            "node": "Normalize & Fingerprint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Auth Token1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Tasks1": {
+      "main": [
+        [
+          {
+            "node": "Build Reorder List1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Reorder List1": {
+      "main": [
+        [
+          {
+            "node": "Item Reorder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auth Token1": {
+      "main": [
+        [
+          {
+            "node": "Search Tasks1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/New_York",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "346eab30-d63c-45f5-8796-736d30bf616d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2b4f5eae345026f9a91201a52959720a8c589fbec049d3ae994559ba7e406edd"
+  },
+  "id": "HDJDIp4b2gj8aRFu",
+  "tags": []
+}

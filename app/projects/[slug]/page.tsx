@@ -90,16 +90,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     components: mdxComponents,
   });
 
-  const heroFitClass = project.heroFit === "contain" ? "object-contain p-2" : "object-cover";
+  const heroFrameless = Boolean(project.heroFrameless);
+  const heroFitClass = project.heroFit === "contain"
+    ? heroFrameless
+      ? "object-contain"
+      : "object-contain p-2"
+    : "object-cover";
   const importantLinks = getImportantLinks(project.links);
   const hasCustomAspect = Boolean(project.heroAspect && project.heroAspect.trim().length > 0);
   const heroWrapperClass = hasCustomAspect
-    ? project.heroFit === "contain"
-      ? "relative w-full overflow-hidden rounded-2xl border border-border bg-surface-muted p-2"
-      : "relative w-full overflow-hidden rounded-2xl border border-border"
-    : project.heroFit === "contain"
-      ? "relative h-64 overflow-hidden rounded-2xl border border-border bg-surface-muted p-2 md:h-96"
-      : "relative h-64 overflow-hidden rounded-2xl border border-border md:h-96";
+    ? heroFrameless
+      ? "relative w-full"
+      : project.heroFit === "contain"
+        ? "relative w-full overflow-hidden rounded-2xl border border-border bg-surface-muted p-2"
+        : "relative w-full overflow-hidden rounded-2xl border border-border"
+    : heroFrameless
+      ? "relative h-64 w-full md:h-96"
+      : project.heroFit === "contain"
+        ? "relative h-64 overflow-hidden rounded-2xl border border-border bg-surface-muted p-2 md:h-96"
+        : "relative h-64 overflow-hidden rounded-2xl border border-border md:h-96";
 
   return (
     <main className="container-page space-y-8">

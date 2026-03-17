@@ -65,6 +65,7 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     heroAspect: String(frontmatter.heroAspect ?? ""),
     heroFit,
     heroPosition: normalizeObjectPosition(frontmatter.heroPosition, "center center"),
+    heroFrameless: Boolean(frontmatter.heroFrameless),
     cardImageFit,
     cardImagePosition: normalizeObjectPosition(frontmatter.cardImagePosition, "center center"),
     links: normalizeLinks(frontmatter.links),

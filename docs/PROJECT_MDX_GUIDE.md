@@ -50,6 +50,7 @@ heroImage: "/projects/project-slug/images/hero.jpg"
 heroAspect: "16 / 9"
 heroFit: "cover"          # "cover" or "contain"
 heroPosition: "center 30%" # CSS object-position value
+heroFrameless: false        # true = remove hero frame/border wrapper
 
 # Optional project-card image controls (all-projects screen)
 cardImageFit: "cover"            # "cover" or "contain"
@@ -77,12 +78,16 @@ You can control top image behavior per project:
   - `contain` = no crop, may letterbox
 - `heroPosition`: focal point when using `cover`
   - Example: `"center center"`, `"center 20%"`, `"50% 30%"`
+- `heroFrameless`: whether to remove the rounded hero frame/background wrapper
+  - `true` = full-width frameless hero using the image aspect ratio
+  - `false` (or omitted) = default framed hero
 
 Good default for most projects:
 
 - `heroAspect: "16 / 9"`
 - `heroFit: "cover"`
 - `heroPosition: "center center"`
+- `heroFrameless: false`
 
 Project cards on the all-projects screen can be controlled independently:
 

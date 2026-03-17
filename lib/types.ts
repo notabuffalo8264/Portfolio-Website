@@ -26,6 +26,7 @@ export type ProjectFrontmatter = {
   heroAspect?: string;
   heroFit?: "cover" | "contain";
   heroPosition?: string;
+  heroFrameless?: boolean;
   cardImageFit?: "cover" | "contain";
   cardImagePosition?: string;
   links?: ProjectLinks;

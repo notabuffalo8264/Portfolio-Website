@@ -1,0 +1,91 @@
+---
+title: "Automated D2L → Todo System"
+slug: "d2l-to-todoist-n8n"
+date: "2025-9-10"
+category: "Software"
+featured: false
+summary: "An automated workflow built with n8n that pulls assignments from D2L and syncs them directly into my personal task manager, eliminating manual tracking."
+tags: ["n8n", "automation", "productivity", "api", "workflow"]
+
+heroImage: "/projects/d2l-to-todoist-n8n/images/image.png"
+heroAspect: "1838 / 551"
+heroFit: "contain"
+heroPosition: "center center"
+heroFrameless: true
+---
+
+## What I Built
+
+This project is a fully automated system that connects my **D2L calendar** to the task app I use on my phone. Instead of manually checking each class for due dates, quizzes, and exams, everything is automatically collected and added to my personal to-do list.
+
+The workflow runs on a schedule, pulls calendar data, filters out relevant assignments, and creates tasks with due dates and useful links — all without any manual input.
+
+For reference, the full workflow JSON is available below to view or download.
+
+## Why I Made It
+
+I found it frustrating to constantly check multiple classes just to make sure I wasn’t missing anything important. Even though all the information existed in D2L, it wasn’t organized in a way that worked well for how I plan my time.
+
+I wanted a system where everything I needed to do simply appeared in one place — automatically — so I could focus on actually getting work done instead of tracking it.
+
+## Key Challenge
+
+The hardest part of this project was making the system reliable over time.
+
+A naive version would continuously create duplicate tasks every time the workflow ran, especially after marking items as complete on my phone. Solving this required designing a way for the system to recognize what had already been created, updated, or finished so that it stayed clean and accurate.
+
+## How It Works (High Level)
+
+- Pulls calendar data directly from D2L  
+- Extracts assignments, quizzes, and exams  
+- Filters and formats them into clean tasks  
+- Syncs them to my task app with due dates and links  
+- Keeps everything updated without creating duplicates  
+
+The result is a system that stays out of the way but quietly keeps everything organized.
+
+## Workflow JSON
+
+You can inspect or download the exact n8n workflow file:
+
+<div className="mt-4 grid max-w-md gap-3">
+	<a
+		href="/projects/d2l-to-todoist-n8n/downloads/Auto%20Todoist.json"
+		target="_blank"
+		rel="noreferrer"
+		aria-label="Open workflow JSON in browser"
+		className="group inline-flex w-full items-center gap-3 rounded-xl border border-border bg-gradient-to-b from-surface to-surface-muted px-4 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md !text-foreground !no-underline"
+	>
+		<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-[10px] font-bold tracking-wide">JSON</span>
+		<span className="flex min-w-0 flex-col leading-tight">
+			<span className="truncate text-sm font-semibold">View Auto Todoist.json</span>
+			<span className="mt-0.5 text-xs text-foreground/70">Open in browser</span>
+		</span>
+		<span className="ml-auto text-base font-semibold text-foreground/60 transition group-hover:translate-x-0.5">&gt;</span>
+	</a>
+	<a
+		href="/projects/d2l-to-todoist-n8n/downloads/Auto%20Todoist.json"
+		download
+		aria-label="Download workflow JSON"
+		className="group inline-flex w-full items-center gap-3 rounded-xl border border-border bg-gradient-to-b from-surface to-surface-muted px-4 py-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md !text-foreground !no-underline"
+	>
+		<span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-surface text-[10px] font-bold tracking-wide">JSON</span>
+		<span className="flex min-w-0 flex-col leading-tight">
+			<span className="truncate text-sm font-semibold">Download Auto Todoist.json</span>
+			<span className="mt-0.5 text-xs text-foreground/70">Import into n8n</span>
+		</span>
+		<span className="ml-auto text-base font-semibold text-foreground/60 transition group-hover:translate-x-0.5">&gt;</span>
+	</a>
+</div>
+
+To use it in n8n, import the downloaded JSON into a new workflow and then update credentials for your own accounts.
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">n8n</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Workflow Automation</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">HTTP APIs</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Todoist API</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">iCal / ICS Parsing</span>
+</div>
