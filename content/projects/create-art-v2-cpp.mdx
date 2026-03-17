@@ -2,43 +2,102 @@
 inProduction: true
 title: "Create Art V2 (C++)"
 slug: "create-art-v2-cpp"
-date: "2022-04-10"
+date: "2024-03-15"
 category: "Software"
 featured: false
-summary: "Second-generation creative drawing app built in C++ with mouse/stylus interaction and keyboard shortcuts."
-tags: ["c++", "creative-coding", "mouse-input", "stylus", "learning-project"]
+summary: "A second iteration of my sketch app built in C++, adding stylus support, a cleaner workspace, and expanded controls while learning low-level application design."
+tags: ["c++", "software", "creative-tools", "gui", "input-systems"]
+
 heroImage: "/projects/create-art-v2-cpp/images/project-9.svg"
-links:
-  github: "https://github.com/your-handle/create-art-v2"
+heroAspect: "16 / 9"
+heroFit: "contain"
+heroPosition: "center center"
+cardImageFit: "contain"
+cardImagePosition: "center center"
 ---
 
-## Overview
+## How This Started
 
-Create Art V2 is a follow-up to V1, redesigned around practical drawing interactions using mouse/stylus input plus keyboard shortcuts.
+Create Art V2 started after I spent time using my Java version of this project and realized I wanted a workflow that felt more practical for daily sketching. I rebuilt the idea in **C++** so I could push the app further and learn lower-level application design along the way.
 
-## Problem / Constraints
+After switching to a touchscreen laptop, supporting stylus input became a big priority. I wanted to keep the speed of keyboard-driven interaction from V1 while adding more natural pointer-based drawing.
 
-- V1 input model was limiting for detailed control.
-- Needed faster, more intuitive drawing workflows.
-- Project remained a self-driven learning build without AI-generated code.
+## What it does
 
-## Approach
+The app supports both **stylus input and keyboard controls**, making it flexible for quick sketches, notes, and explaining ideas. A collapsible side panel keeps tools available when needed without permanently taking over workspace.
 
-Rebuilt the interaction model in C++, implementing pointer-based drawing and shortcut-driven actions for mode/tool control.
+Compared with V1, this version focused more on usability and control flow, with a cleaner layout and broader interaction options.
 
-## Results
+## Input & Workflow Highlights
 
-<div className="mt-4 grid gap-3 sm:grid-cols-3">
-  <MetricCard label="Language" value="C++" />
-  <MetricCard label="Input Model" value="Mouse/Stylus + Shortcuts" />
-  <MetricCard label="Progression" value="V2 of Original Tool" />
+<div className="mt-4 grid gap-4 lg:grid-cols-2">
+	<div className="rounded-xl border border-border bg-surface-muted/60 p-4">
+		<div className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">Drawing Input</div>
+		<ul className="mt-3 list-none space-y-1 pl-0 text-sm">
+			<li>Stylus-friendly drawing for natural sketching</li>
+			<li>Keyboard-driven controls for fast actions</li>
+			<li>Supports quick switch between interaction styles</li>
+		</ul>
+	</div>
+
+	<div className="rounded-xl border border-border bg-surface-muted/60 p-4">
+		<div className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">Workspace Design</div>
+		<ul className="mt-3 list-none space-y-1 pl-0 text-sm">
+			<li>Cleaner canvas-first layout than V1</li>
+			<li>Collapsible side panel for tool access</li>
+			<li>Built for quick ideation and visual explanations</li>
+		</ul>
+	</div>
+
+	<div className="rounded-xl border border-border bg-surface-muted/60 p-4 lg:col-span-2">
+		<div className="m-0 text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">Engineering Focus</div>
+		<ul className="mt-3 list-none space-y-1 pl-0 text-sm">
+			<li>Reworked event handling and rendering in C++</li>
+			<li>Expanded undo and interaction logic compared with V1</li>
+			<li>Explored tradeoffs between features, memory, and responsiveness</li>
+		</ul>
+	</div>
 </div>
 
-## Media
+## Why I built it
 
-<ImageGallery images={[{ src: "/projects/create-art-v2-cpp/images/project-9.svg", alt: "Create Art V2 placeholder" }, { src: "/projects/create-art-v2-cpp/images/project-8.svg", alt: "Input workflow placeholder" }]} />
+After using the first version, I wanted something that felt better for real daily use, especially on a touchscreen laptop. Supporting stylus and keyboard input together made the app much more practical for how I actually sketch and explain ideas.
 
-## Lessons / Next Steps
+At the same time, this was a learning project for C++, so I intentionally did not use AI to generate the code. I used V2 as a way to deeply understand input handling, rendering, and state management by building it myself.
 
-This version improved practical usability and reinforced core C++ event-driven programming patterns for interactive tools.
+## Challenges & Limitations
 
+As the feature set grew, performance started to degrade during longer drawing sessions. The biggest issue came from storing a full history of actions for undo support, which pushed memory usage up over time.
+
+The app worked well for shorter sessions, but this limitation highlighted the tradeoffs involved in custom state/history systems and where optimization work is still needed.
+
+## Looking Ahead
+
+This project is part of an ongoing idea rather than a finished endpoint. It helped define what worked from V1, what needed redesign, and what architectural decisions matter most when scaling an interactive drawing app.
+
+## Media & Documentation
+
+### App Demo
+
+A full recorded V2 demo is not published yet.
+
+### Visual Overview
+
+<ImageCarousel imagesJson='[
+	{"src":"/projects/create-art-v2-cpp/images/project-9.svg","alt":"Create Art V2 interface overview"},
+	{"src":"/projects/create-art-v2-cpp/images/project-8.svg","alt":"Create Art V2 input workflow"}
+]' />
+
+### Try the App
+
+This version is currently a local learning build, so there is no public binary download yet.
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">C++</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Custom GUI / Input Handling</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Stylus Input</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Keyboard Input</span>
+	<span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Creative Software</span>
+</div>
