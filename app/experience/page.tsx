@@ -264,13 +264,16 @@ function MsgcBulletText() {
 
 function Timeline({ title, entries }: { title: string; entries: ExperienceEntry[] }) {
   return (
-    <section className="space-y-4">
-      <h2 className="section-title">{title}</h2>
-      <div className="space-y-4">
+    <section className="grid gap-8 border-t border-border pt-10 lg:grid-cols-[0.35fr_1fr]">
+      <div>
+        <p className="technical-label text-accent-bright">{title}</p>
+      </div>
+      <div>
         {entries.map((entry) => (
-          <article key={`${entry.role}-${entry.org}`} className="card p-5">
-            <div className="flex flex-col gap-1 md:flex-row md:items-center md:justify-between">
-              <h3 className="text-lg font-semibold">
+          <article key={`${entry.role}-${entry.org}`} className="relative border-t border-border py-7 first:border-t-0 first:pt-0 md:pl-8">
+            <span className={`absolute left-0 top-8 hidden size-2 rounded-full border md:block ${entry.dates.includes("Present") ? "border-accent bg-accent" : "border-border-strong bg-background"}`} />
+            <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+              <h3 className="max-w-2xl text-xl font-semibold tracking-tight">
                 {entry.role === "Undergraduate Learning Assistant (ULA)" ? (
                   <UlaRoleTitle />
                 ) : entry.role === "University Undergraduate Research and Arts Forum Presenter (UURAF)" ? (
@@ -279,10 +282,10 @@ function Timeline({ title, entries }: { title: string; entries: ExperienceEntry[
                   entry.role
                 )}
               </h3>
-              <p className="text-sm text-foreground/70">{entry.dates}</p>
+              <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.1em] text-foreground-muted">{entry.dates}</p>
             </div>
-            <p className="mt-1 font-medium text-foreground/85">{entry.org}</p>
-            <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-foreground/85">
+            <p className="mt-2 text-sm font-medium text-foreground-secondary">{entry.org}</p>
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-foreground-secondary marker:text-accent">
               {entry.bullets.map((bullet) => (
                 <li key={bullet}>
                   {title === "Education" && bullet === "Honors College" ? (
@@ -301,14 +304,14 @@ function Timeline({ title, entries }: { title: string; entries: ExperienceEntry[
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
                   href={`/projects/${entry.projectSlug}`}
-                  className="inline-flex items-center rounded-full border border-border bg-surface-muted px-3 py-1 text-xs font-medium text-foreground/85 transition hover:bg-surface hover:text-foreground"
+                  className="focus-ring inline-flex items-center rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-foreground-secondary transition hover:border-accent/40 hover:text-foreground"
                 >
                   {entry.projectLabel ?? "View project"}
                 </Link>
                 {entry.projectSlug2 ? (
                   <Link
                     href={`/projects/${entry.projectSlug2}`}
-                    className="inline-flex items-center rounded-full border border-border bg-surface-muted px-3 py-1 text-xs font-medium text-foreground/85 transition hover:bg-surface hover:text-foreground"
+                    className="focus-ring inline-flex items-center rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-foreground-secondary transition hover:border-accent/40 hover:text-foreground"
                   >
                     {entry.projectLabel2 ?? "View project"}
                   </Link>
@@ -324,27 +327,28 @@ function Timeline({ title, entries }: { title: string; entries: ExperienceEntry[
 
 export default function ExperiencePage() {
   return (
-    <main className="container-page space-y-10">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-semibold tracking-tight">Experience</h1>
-        <p className="max-w-3xl text-foreground/80">Expanded experience and technical contributions beyond the one-page resume.</p>
+    <main className="container-page space-y-20 pt-32">
+      <header className="content-width border-b border-border pb-14">
+        <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.95] tracking-[-0.06em]">Experience</h1>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">Expanded experience and technical contributions beyond the one-page resume.</p>
       </header>
 
-      <Timeline title="Education" entries={education} />
-      <Timeline title="Professional Experience" entries={professionalExperience} />
-      <Timeline title="Research Experience" entries={researchExperience} />
+      <div className="content-width space-y-20">
+        <Timeline title="Education" entries={education} />
+        <Timeline title="Professional Experience" entries={professionalExperience} />
+        <Timeline title="Research Experience" entries={researchExperience} />
+        <Timeline title="Leadership & Activities" entries={leadershipActivities} />
+      </div>
 
-      <Timeline title="Leadership & Activities" entries={leadershipActivities} />
-
-      <section className="space-y-4">
-        <h2 className="section-title">Skills</h2>
-        <div className="grid gap-4 md:grid-cols-3">
+      <section className="content-width border-t border-border pt-10">
+        <h2 className="section-title">Technical toolkit</h2>
+        <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
           {skillGroups.map((group) => (
-            <article key={group.title} className="card p-5">
+            <article key={group.title} className="bg-surface p-6">
               <h3 className="text-base font-semibold">{group.title}</h3>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {group.items.map((item) => (
-                  <span key={item} className="rounded-full bg-surface-muted px-3 py-1 text-sm">
+                  <span key={item} className="font-mono text-xs leading-6 text-foreground-secondary">
                     {item}
                   </span>
                 ))}

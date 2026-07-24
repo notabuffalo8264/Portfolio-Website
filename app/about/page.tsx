@@ -25,31 +25,30 @@ export default async function AboutPage() {
   const bio = await getBioContent();
 
   return (
-    <main className="container-page space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-semibold tracking-tight">About</h1>
-        <p className="max-w-3xl text-foreground/80">
+    <main className="container-page space-y-16 pt-32">
+      <header className="content-width border-b border-border pb-14">
+        <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.95] tracking-[-0.06em]">About</h1>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">
           I&apos;m a Mechanical Engineering major with a minor in Materials Science, focused on building practical systems across research, design, and software.
         </p>
       </header>
 
-      <section className="grid gap-6 md:grid-cols-[300px_1fr]">
-        <div className="relative h-56 overflow-hidden rounded-2xl border border-border">
-          <Image src="/images/profile/profile.png" alt="Profile photo" fill className="object-cover" />
+      <section className="content-width grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:items-end">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[24px] border border-border bg-surface">
+          <Image src="/images/profile/profile.png" alt="Christopher Kopiwoda" fill className="object-cover" sizes="(min-width: 768px) 42vw, 100vw" priority />
         </div>
-        <article className="card p-5">
-          <h2 className="text-lg font-semibold">Roles I&apos;m Seeking</h2>
-          <p className="mt-3 text-foreground/85">
+        <article className="border-t border-border py-7">
+          <p className="technical-label">Current direction</p>
+          <h2 className="mt-5 text-3xl font-semibold tracking-tight">Roles I&apos;m seeking</h2>
+          <p className="mt-4 max-w-xl text-lg leading-8 text-foreground-secondary">
             Mechanical Engineering and R&D roles involving experimental design, materials design, and prototype development.
           </p>
         </article>
       </section>
 
-      <section>
-        <article className="card p-6">
-          <h2 className="text-xl font-semibold">Bio</h2>
-          <article className="mdx-content mt-3 text-foreground/85">{bio.content}</article>
-        </article>
+      <section className="reading-width border-t border-border pt-10">
+        <p className="technical-label text-accent-bright">Biography</p>
+        <article className="mdx-content mt-6">{bio.content}</article>
       </section>
     </main>
   );

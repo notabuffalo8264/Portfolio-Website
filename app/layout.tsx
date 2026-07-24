@@ -47,11 +47,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen overflow-x-clip bg-background text-foreground">
           <SiteHeader />
           <PageTransition>{children}</PageTransition>
           <SiteFooter />

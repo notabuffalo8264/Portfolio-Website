@@ -11,14 +11,13 @@ export default async function ProjectsPage() {
   const projects = await getAllProjects();
 
   return (
-    <main className="container-page space-y-8">
-      <header className="space-y-3">
-        <h1 className="text-4xl font-semibold tracking-tight">Projects</h1>
-        <p className="max-w-2xl text-foreground/80">
-          A collection of projects I’ve been working on over the past few years, covering mechanical engineering, software, and research.
-        </p>
+    <main className="container-page pt-32">
+      <header className="content-width">
+        <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.95] tracking-[-0.06em]">Projects</h1>
       </header>
-      <ProjectsBrowser projects={projects} />
+      <div className="content-width mt-8 md:mt-10">
+        <ProjectsBrowser projects={projects} />
+      </div>
     </main>
   );
 }

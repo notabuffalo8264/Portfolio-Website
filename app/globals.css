@@ -1,74 +1,154 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 :root {
-  --background: #f6f8fb;
-  --foreground: #101828;
-  --surface: #ffffff;
-  --surface-muted: #eef2f7;
-  --border: #d0d7e2;
-  --accent: #205fe8;
+  color-scheme: dark;
+  --background: #07090d;
+  --background-deep: #040609;
+  --foreground: #f5f7fb;
+  --foreground-secondary: #a2acba;
+  --foreground-muted: #717c8b;
+  --surface: #0c1017;
+  --surface-raised: #111722;
+  --surface-muted: #151d2a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --accent: #4c7dff;
+  --accent-bright: #6f98ff;
+  --accent-soft: rgba(76, 125, 255, 0.14);
+  --accent-glow: rgba(76, 125, 255, 0.24);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-deep: var(--background-deep);
   --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-surface-muted: var(--surface-muted);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-soft: var(--accent-soft);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-.dark {
-  --background: #090b11;
-  --foreground: #e5e7eb;
-  --surface: #141924;
-  --surface-muted: #1c2333;
-  --border: #2b3446;
-  --accent: #74a3ff;
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
 }
 
 a {
   color: inherit;
 }
 
+.focus-ring {
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
 .container-page {
-  @apply mx-auto w-full max-w-6xl px-4 py-8 md:px-6 md:py-10;
+  @apply mx-auto w-full max-w-[1440px] px-5 py-16 md:px-8 md:py-24 lg:px-12;
+}
+
+.content-width {
+  @apply mx-auto w-full max-w-[1240px];
+}
+
+.reading-width {
+  @apply mx-auto w-full max-w-[760px];
 }
 
 .card {
-  @apply rounded-2xl border border-border bg-surface shadow-sm;
+  @apply rounded-2xl border border-border bg-surface;
 }
 
 .section-title {
-  @apply text-2xl font-semibold tracking-tight md:text-3xl;
+  @apply text-3xl font-semibold tracking-[-0.035em] md:text-5xl;
+}
+
+.technical-label {
+  @apply font-mono text-[0.7rem] uppercase tracking-[0.14em] text-foreground-muted;
+}
+
+.button-primary,
+.button-secondary {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-[10px] px-5 py-2.5 text-sm font-medium outline-none transition duration-200 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+}
+
+.button-primary {
+  @apply bg-accent text-white hover:bg-accent-bright;
+}
+
+.button-secondary {
+  @apply border border-border-strong bg-surface/70 text-foreground hover:border-accent/50 hover:bg-surface-raised;
+}
+
+.engineering-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 .mdx-content h2 {
-  @apply mt-8 text-2xl font-semibold;
+  @apply mt-14 text-3xl font-semibold tracking-tight;
 }
 
 .mdx-content h3 {
-  @apply mt-6 text-xl font-semibold;
+  @apply mt-10 text-xl font-semibold;
 }
 
 .mdx-content p {
-  @apply mt-4 leading-7 text-foreground/90;
+  @apply mt-5 text-[1.05rem] leading-8 text-foreground-secondary;
 }
 
 .mdx-content ul {
-  @apply mt-4 list-disc space-y-2 pl-6;
+  @apply mt-5 list-disc space-y-3 pl-6 text-foreground-secondary;
 }
 
 .mdx-content a {
-  @apply text-accent underline underline-offset-2;
+  @apply text-accent-bright underline decoration-accent/50 underline-offset-4;
+}
+
+.mdx-content img,
+.mdx-content video {
+  @apply rounded-2xl border border-border;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

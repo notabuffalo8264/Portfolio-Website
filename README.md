@@ -93,3 +93,19 @@ npm run build
 npm run start
 ```
 
+## Homepage mechanism
+
+The homepage loads its GLB from:
+
+```text
+public/models/homepage-mechanism.glb
+```
+
+Replace that single file to use a production CAD export. Framing and animation settings live in
+`components/three/model-config.ts`; adjust `targetSizeDesktop`, `targetSizeMobile`,
+`rotationOffset`, `positionOffset`, or `scaleMultiplier` there when an export needs tuning.
+
+If the GLB contains animations, the site prefers a clip named `HomepageLoop` and maps it to a
+ten-second repeating presentation. Otherwise it uses the first clip, or the code-driven mechanism
+animation when no clips exist. Keep the desired clip loopable and export it with the GLB.
+

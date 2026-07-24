@@ -9,9 +9,9 @@ type CalloutProps = {
 
 export function Callout({ title, children }: CalloutProps) {
   return (
-    <aside className="mt-6 rounded-2xl border border-accent/30 bg-accent/5 p-4">
-      <h4 className="text-sm font-semibold text-accent">{title}</h4>
-      <div className="mt-2 text-sm text-foreground/90">{children}</div>
+    <aside className="mt-8 rounded-2xl border border-accent/25 bg-accent-soft p-5 md:p-6">
+      <h4 className="font-mono text-xs uppercase tracking-[0.12em] text-accent-bright">{title}</h4>
+      <div className="mt-3 text-sm leading-7 text-foreground-secondary">{children}</div>
     </aside>
   );
 }
@@ -23,9 +23,9 @@ type MetricCardProps = {
 
 export function MetricCard({ label, value }: MetricCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4">
-      <p className="text-xs uppercase tracking-wide text-foreground/60">{label}</p>
-      <p className="mt-1 text-xl font-semibold">{value}</p>
+    <div className="rounded-2xl border border-border bg-surface p-5">
+      <p className="font-mono text-[10px] uppercase tracking-[0.12em] text-foreground-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>
     </div>
   );
 }
@@ -40,11 +40,11 @@ export function ImageGallery({ images }: ImageGalleryProps) {
   }
 
   return (
-    <div className="mt-6 grid gap-3 sm:grid-cols-2">
+    <div className="mt-8 grid gap-4 sm:grid-cols-2 md:-mx-24">
       {images.map((image) => (
-        <div key={image.src} className="relative h-56 overflow-hidden rounded-xl border border-border">
+        <figure key={image.src} className="relative h-64 overflow-hidden rounded-2xl border border-border bg-surface">
           <Image src={image.src} alt={image.alt} fill className="object-cover" />
-        </div>
+        </figure>
       ))}
     </div>
   );
@@ -62,7 +62,7 @@ export function TechTagList({ items }: TechTagListProps) {
   return (
     <div className="mt-4 flex flex-wrap gap-2">
       {items.map((item) => (
-        <span key={item} className="rounded-full border border-border bg-surface-muted px-3 py-1 text-xs">
+        <span key={item} className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-foreground-muted">
           {item}
         </span>
       ))}
