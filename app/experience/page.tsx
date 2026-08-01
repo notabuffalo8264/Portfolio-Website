@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CapabilitiesGrid } from "@/components/capabilities-grid";
+import { homeContent } from "@/lib/home-content";
 import { ExperienceEntry } from "@/lib/types";
 
 export const metadata: Metadata = {
@@ -171,21 +173,6 @@ const leadershipActivities: ExperienceEntry[] = [
   }
 ];
 
-const skillGroups = [
-  {
-    title: "Engineering & Design",
-    items: ["SolidWorks (CAD)", "NX (CAD)", "Fusion 360 (CAD)", "Abaqus (FEA)", "Blender", "3D Printing", "Technical Documentation"],
-  },
-  {
-    title: "Software Development",
-    items: ["Python", "MATLAB", "Java", "C++", "TypeScript"],
-  },
-  {
-    title: "Tools & Workflow",
-    items: ["Git", "GitHub", "VS Code", "Linux", "LaTeX", "n8n"],
-  },
-];
-
 function TooltipTerm({ term, description }: { term: string; description: string }) {
   return (
     <span className="group relative inline-block cursor-help text-foreground underline decoration-dotted underline-offset-4 decoration-border transition-colors hover:text-accent">
@@ -341,21 +328,9 @@ export default function ExperiencePage() {
       </div>
 
       <section className="content-width border-t border-border pt-10">
-        <h2 className="section-title">Technical toolkit</h2>
-        <div className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border md:grid-cols-3">
-          {skillGroups.map((group) => (
-            <article key={group.title} className="bg-surface p-6">
-              <h3 className="text-base font-semibold">{group.title}</h3>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span key={item} className="font-mono text-xs leading-6 text-foreground-secondary">
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
+        <p className="technical-label text-accent-bright">Capabilities</p>
+        <h2 className="section-title mt-5">Skills and tools</h2>
+        <CapabilitiesGrid groups={homeContent.capabilities} />
       </section>
     </main>
   );

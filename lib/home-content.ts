@@ -1,14 +1,4 @@
 export const homeContent = {
-  eyebrow: "Mechanical Design / Materials Research / Engineering Software",
-  name: "Christopher Kopiwoda",
-  introduction:
-    "Mechanical Engineering major and Materials Science minor engaged in materials research, mechanical design, and software development.",
-  overview: [
-    { label: "Design", text: "Develop practical mechanical systems with CAD, simulation, and thoughtful documentation." },
-    { label: "Analyze", text: "Evaluate structures, materials, and experimental results with engineering rigor." },
-    { label: "Build", text: "Turn concepts into prototypes through fabrication, iteration, and hands-on testing." },
-    { label: "Compute", text: "Create software and automation that make technical workflows more reliable." },
-  ],
   experiencePreview: [
     {
       role: "NASA Michigan Space Grant Consortium Undergraduate Research Fellow",
@@ -28,27 +18,46 @@ export const homeContent = {
   ],
   capabilities: [
     {
-      title: "Mechanical design & analysis",
-      items: ["SolidWorks", "NX", "Fusion 360", "Abaqus", "Technical Documentation"],
+      title: "Mechanical Design & Analysis",
+      items: [
+        "SolidWorks",
+        "Creo",
+        "NX",
+        "Fusion 360",
+        "Abaqus",
+        "Technical Documentation",
+      ],
     },
     {
-      title: "Manufacturing & prototyping",
-      items: ["3D Printing", "Blender", "Experimental Design"],
+      title: "Manufacturing & Prototyping",
+      items: [
+        "FDM & Resin 3D Printing",
+        "Prototype Fabrication",
+        "Blender",
+      ],
     },
     {
-      title: "Materials & experimentation",
-      items: ["Materials Synthesis", "Crystal Growth", "XRD Analysis"],
+      title: "Materials Research",
+      items: [
+        "Materials Synthesis",
+        "Single Crystal Growth",
+        "XRD Analysis",
+      ],
     },
     {
-      title: "Engineering software & computation",
-      items: ["Python", "MATLAB", "Java", "C++", "TypeScript", "n8n"],
+      title: "Programming & Engineering Software",
+      items: [
+        "Python",
+        "C++",
+        "Java",
+        "MATLAB",
+        "Git",
+        "GitHub",
+        "Linux Server Management",
+        "VS Code",
+        "LaTeX",
+        "n8n",
+      ],
     },
   ],
-  contact: {
-    heading: "Let’s build something that works in the real world.",
-    body: "Open to mechanical engineering, R&D, materials research, and multidisciplinary software opportunities.",
-    email: "ckopiwoda@comcast.net",
-    github: "https://github.com/notabuffalo8264",
-    linkedin: "https://linkedin.com/in/christopher-kopiwoda/",
-  },
 } as const;

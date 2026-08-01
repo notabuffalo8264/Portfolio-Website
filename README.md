@@ -48,7 +48,6 @@ date: "2026-01-01"
 category: "Mechanical Engineering" # or "Software" or "Research"
 featured: true
 summary: "1-2 sentence summary"
-tags: ["tag1", "tag2"]
 heroImage: "/projects/project-slug/images/hero.webp"
 links:
 	github: "https://github.com/..."
@@ -70,7 +69,6 @@ links:
 - `Callout`
 - `MetricCard`
 - `ImageGallery`
-- `TechTagList`
 
 Example:
 

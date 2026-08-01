@@ -13,6 +13,8 @@ export const MODEL_CONFIG = {
     mobileCycles: 1,
     desktopDamping: 6,
     mobileDamping: 8,
+    maxProgressLag: 0.025,
+    maxFrameDelta: 1 / 30,
     motionStart: 0.12,
     motionEnd: 0.82,
     presentationStart: 0.18,

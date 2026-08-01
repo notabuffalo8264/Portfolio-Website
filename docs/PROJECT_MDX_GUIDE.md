@@ -19,7 +19,6 @@ Use one file per project:
   - `category` (`Mechanical Engineering` | `Software` | `Research`)
   - `featured` (`true` | `false`)
   - `summary`
-  - `tags` (array)
   - `heroImage`
 
 ### Flexible (you can structure however you want)
@@ -43,7 +42,6 @@ date: "2026-03-02"
 category: "Research"
 featured: true
 summary: "1-2 sentence summary used on cards and on the project page intro."
-tags: ["tag-one", "tag-two", "tag-three"]
 heroImage: "/projects/project-slug/images/hero.jpg"
 
 # Optional hero controls
@@ -162,7 +160,6 @@ Available MDX components:
 - `ImageGallery`
 - `ImageCarousel`
 - `ImageSlideshow` (legacy; prefer `ImageCarousel`)
-- `TechTagList`
 
 ### Example snippets
 

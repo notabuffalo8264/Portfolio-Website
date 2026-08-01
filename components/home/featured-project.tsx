@@ -9,7 +9,7 @@ import type { Project } from "@/lib/types";
 
 export function FeaturedProject({ project, index }: { project: Project; index: number }) {
   const reducedMotion = useReducedMotion();
-  const reverse = index % 2 === 0;
+  const reverse = index % 2 === 1;
   const imageFit = project.cardImageFit === "contain" ? "object-contain p-4" : "object-cover";
 
   return (
@@ -22,9 +22,7 @@ export function FeaturedProject({ project, index }: { project: Project; index: n
     >
       <Link
         href={`/projects/${project.slug}`}
-        className={`focus-ring grid items-center gap-7 rounded-[24px] md:grid-cols-12 md:gap-10 ${
-          index === 0 ? "" : ""
-        }`}
+        className="focus-ring grid items-center gap-7 rounded-[24px] md:grid-cols-12 md:gap-10"
       >
         <div
           className={`relative min-h-[280px] overflow-hidden rounded-[24px] border border-border bg-surface md:min-h-[430px] ${
@@ -49,15 +47,8 @@ export function FeaturedProject({ project, index }: { project: Project; index: n
             {project.title}
           </h3>
           <p className="mt-5 line-clamp-3 leading-7 text-foreground-secondary">{project.summary}</p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {project.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="rounded-full border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-foreground-muted">
-                {tag}
-              </span>
-            ))}
-          </div>
           <span className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-foreground transition group-hover:text-accent-bright">
-            View case study <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
+            View project <ArrowUpRight size={16} className="transition group-hover:translate-x-1 group-hover:-translate-y-1" />
           </span>
         </div>
       </Link>

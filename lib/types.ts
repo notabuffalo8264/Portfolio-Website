@@ -21,7 +21,6 @@ export type ProjectFrontmatter = {
   category: ProjectCategory;
   featured: boolean;
   summary: string;
-  tags: string[];
   heroImage: string;
   heroAspect?: string;
   heroFit?: "cover" | "contain";

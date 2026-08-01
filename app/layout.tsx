@@ -51,7 +51,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen overflow-x-clip bg-background text-foreground">
+        <div className="flex min-h-dvh flex-col overflow-x-clip bg-background text-foreground">
           <SiteHeader />
           <PageTransition>{children}</PageTransition>
           <SiteFooter />

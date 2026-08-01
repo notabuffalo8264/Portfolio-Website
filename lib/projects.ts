@@ -60,7 +60,6 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     category,
     featured: Boolean(frontmatter.featured),
     summary: String(frontmatter.summary ?? ""),
-    tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map(String) : [],
     heroImage: String(frontmatter.heroImage ?? "/projects/_shared/images/project-placeholder.svg"),
     heroAspect: String(frontmatter.heroAspect ?? ""),
     heroFit,

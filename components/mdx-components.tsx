@@ -50,31 +50,10 @@ export function ImageGallery({ images }: ImageGalleryProps) {
   );
 }
 
-type TechTagListProps = {
-  items?: string[];
-};
-
-export function TechTagList({ items }: TechTagListProps) {
-  if (!Array.isArray(items) || items.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {items.map((item) => (
-        <span key={item} className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-foreground-muted">
-          {item}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 export const mdxComponents = {
   Callout,
   ImageCarousel,
   MetricCard,
   ImageGallery,
   ImageSlideshow,
-  TechTagList,
 };

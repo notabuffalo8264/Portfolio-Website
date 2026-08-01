@@ -142,13 +142,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             ))}
           </div>
         )}
-        <div className="mt-7 flex flex-wrap gap-2 border-t border-border pt-5">
-          {project.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-border px-3 py-1 font-mono text-[10px] uppercase tracking-wide text-foreground-muted">
-              {tag}
-            </span>
-          ))}
-        </div>
       </header>
 
       <div className="content-width mt-12">

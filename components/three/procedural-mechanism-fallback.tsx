@@ -21,11 +21,18 @@ export function ProceduralMechanismFallback({
 
   useFrame((_, delta) => {
     if (reducedMotion) return;
-    smoothedProgress.current = MathUtils.damp(
+    const safeDelta = Math.min(Math.max(delta, 0), MODEL_CONFIG.scroll.maxFrameDelta);
+    const targetProgress = MathUtils.clamp(scrollProgress.current, 0, 1);
+    const dampedProgress = MathUtils.damp(
       smoothedProgress.current,
-      scrollProgress.current,
+      targetProgress,
       mobile ? MODEL_CONFIG.scroll.mobileDamping : MODEL_CONFIG.scroll.desktopDamping,
-      delta,
+      safeDelta,
+    );
+    smoothedProgress.current = MathUtils.clamp(
+      dampedProgress,
+      Math.max(0, targetProgress - MODEL_CONFIG.scroll.maxProgressLag),
+      Math.min(1, targetProgress + MODEL_CONFIG.scroll.maxProgressLag),
     );
     const progress = smoothedProgress.current;
     const motionProgress = MathUtils.smoothstep(

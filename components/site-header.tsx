@@ -87,9 +87,6 @@ export function SiteHeader() {
                 </Link>
               );
             })}
-          <a href="mailto:ckopiwoda@comcast.net" className="button-primary ml-1">
-            Contact
-          </a>
         </nav>
 
         <button
@@ -137,9 +134,6 @@ export function SiteHeader() {
                 <span className="font-mono text-xs text-foreground-muted">0{index + 1}</span>
               </Link>
             ))}
-            <a href="mailto:ckopiwoda@comcast.net" className="button-primary mt-8">
-              Get in touch
-            </a>
           </nav>
         </div>
       )}

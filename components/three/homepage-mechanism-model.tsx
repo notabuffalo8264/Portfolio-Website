@@ -39,11 +39,12 @@ type InitialTransform = {
 const INCHES_TO_METERS = 0.0254;
 const DEBUG_LINKAGE = false;
 
-function rangeProgress(progress: number, start: number, end: number) {
+function rangeProgress(progress: number, start: number, end: number): number {
+  if (end <= start) return progress >= end ? 1 : 0;
   return MathUtils.clamp((progress - start) / (end - start), 0, 1);
 }
 
-function smoothRange(progress: number, start: number, end: number) {
+function smoothRange(progress: number, start: number, end: number): number {
   const value = rangeProgress(progress, start, end);
   return value * value * (3 - 2 * value);
 }
@@ -98,6 +99,11 @@ const FOUR_BAR_CONFIG = {
   ],
 };
 
+const GEAR_CONFIG = [
+  { name: "Gear-1", axis: "x", direction: 1 },
+  { name: "Pinion-1", axis: "z", direction: 1 },
+] as const;
+
 type MechanismConfig = (typeof FOUR_BAR_CONFIG.mechanisms)[number];
 
 type DebugVisuals = {
@@ -120,6 +126,11 @@ type FourBarRuntime = {
   candidates: IntersectionPair;
   warnedInvalid: boolean;
   debug?: DebugVisuals;
+};
+
+type GearRuntime = {
+  config: (typeof GEAR_CONFIG)[number];
+  pivotGroup: Group;
 };
 
 function angleInYZ(from: Vector3 | PlanePoint, to: Vector3 | PlanePoint) {
@@ -270,6 +281,41 @@ function setupFourBarLinkages(scene: Object3D): FourBarRuntime[] {
   return runtimes;
 }
 
+function setupGearRotations(scene: Object3D): GearRuntime[] {
+  const cacheKey = "__gearRuntimes";
+  const cached = scene.userData[cacheKey] as GearRuntime[] | undefined;
+  if (cached) return cached;
+
+  scene.updateMatrixWorld(true);
+  const runtimes: GearRuntime[] = [];
+
+  for (const config of GEAR_CONFIG) {
+    const gear = getGltfNode(scene, config.name);
+    const parent = gear?.parent;
+    if (!gear || !parent) {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(`Gear animation is missing GLB node: ${config.name}`);
+      }
+      continue;
+    }
+
+    // SolidWorks exports do not guarantee that a mesh origin is at the gear
+    // center. Build a pivot at its visual center, in the common YZ motion plane.
+    const worldCenter = new Box3().setFromObject(gear).getCenter(new Vector3());
+    const localCenter = parent.worldToLocal(worldCenter);
+    const pivotGroup = createPivotGroup(
+      parent,
+      gear,
+      localCenter,
+      `GearPivot_${config.name}`,
+    );
+    runtimes.push({ config, pivotGroup });
+  }
+
+  scene.userData[cacheKey] = runtimes;
+  return runtimes;
+}
+
 export function HomepageMechanismModel({
   scrollProgress,
   reducedMotion,
@@ -285,7 +331,9 @@ export function HomepageMechanismModel({
   const scene = useMemo(() => clone(gltf.scene), [gltf.scene]);
   const { actions } = useAnimations(gltf.animations, sceneRoot);
   const linkageRuntimes = useMemo(() => setupFourBarLinkages(scene), [scene]);
+  const gearRuntimes = useMemo(() => setupGearRotations(scene), [scene]);
   const smoothedProgress = useRef(0);
+  const pointerOffset = useRef({ x: 0, y: 0 });
   const { viewport, camera } = useThree();
 
   const modelBounds = useMemo(() => {
@@ -361,15 +409,27 @@ export function HomepageMechanismModel({
     const root = presentation.current;
     if (!root) return;
 
-    const targetProgress = reducedMotion ? 0 : scrollProgress.current;
-    smoothedProgress.current = reducedMotion
+    const safeDelta = Math.min(Math.max(delta, 0), MODEL_CONFIG.scroll.maxFrameDelta);
+    const targetProgress = reducedMotion
       ? 0
-      : MathUtils.damp(
+      : MathUtils.clamp(scrollProgress.current, 0, 1);
+
+    if (reducedMotion) {
+      smoothedProgress.current = 0;
+    } else {
+      const dampedProgress = MathUtils.damp(
           smoothedProgress.current,
           targetProgress,
           mobile ? MODEL_CONFIG.scroll.mobileDamping : MODEL_CONFIG.scroll.desktopDamping,
-          delta,
+          safeDelta,
         );
+      smoothedProgress.current = MathUtils.clamp(
+        dampedProgress,
+        Math.max(0, targetProgress - MODEL_CONFIG.scroll.maxProgressLag),
+        Math.min(1, targetProgress + MODEL_CONFIG.scroll.maxProgressLag),
+      );
+    }
+
     const progress = smoothedProgress.current;
     const presentationProgress = smoothRange(
       progress,
@@ -383,40 +443,39 @@ export function HomepageMechanismModel({
     if (reducedMotion) {
       root.rotation.set(0.18, -0.45, MODEL_CONFIG.rotationOffset[2]);
       root.position.set(...framing.displayPosition);
+      pointerOffset.current.x = 0;
+      pointerOffset.current.y = 0;
       camera.position.y = 0.65;
       camera.position.z = 8;
     } else {
-      const pointerX = mobile ? 0 : pointer.x * 0.05;
-      const pointerY = mobile ? 0 : pointer.y * 0.03;
+      pointerOffset.current.x = MathUtils.damp(
+        pointerOffset.current.x,
+        mobile ? 0 : pointer.x * 0.05,
+        8,
+        safeDelta,
+      );
+      pointerOffset.current.y = MathUtils.damp(
+        pointerOffset.current.y,
+        mobile ? 0 : pointer.y * 0.03,
+        8,
+        safeDelta,
+      );
       const startY = mobile ? -0.28 : -0.45;
       const endY = mobile ? 0.18 : 0.3;
       const startX = mobile ? 0.16 : 0.18;
       const endX = mobile ? 0.06 : -0.02;
 
-      root.rotation.y = MathUtils.damp(
-        root.rotation.y,
-        MathUtils.lerp(startY, endY, presentationProgress) + pointerX,
-        6,
-        delta,
-      );
-      root.rotation.x = MathUtils.damp(
-        root.rotation.x,
-        MathUtils.lerp(startX, endX, presentationProgress) - pointerY,
-        6,
-        delta,
-      );
+      root.rotation.y =
+        MathUtils.lerp(startY, endY, presentationProgress) + pointerOffset.current.x;
+      root.rotation.x =
+        MathUtils.lerp(startX, endX, presentationProgress) - pointerOffset.current.y;
       root.rotation.z = MODEL_CONFIG.rotationOffset[2];
       root.position.x = framing.displayPosition[0];
       root.position.y = framing.displayPosition[1] + presentationProgress * 0.04;
       root.position.z = framing.displayPosition[2];
 
-      camera.position.y = MathUtils.damp(camera.position.y, 0.65 + cameraProgress * 0.08, 6, delta);
-      camera.position.z = MathUtils.damp(
-        camera.position.z,
-        MathUtils.lerp(8, MODEL_CONFIG.scroll.cameraEndZ, cameraProgress),
-        6,
-        delta,
-      );
+      camera.position.y = 0.65 + cameraProgress * 0.08;
+      camera.position.z = MathUtils.lerp(8, MODEL_CONFIG.scroll.cameraEndZ, cameraProgress);
     }
 
     const linkageProgress = reducedMotion
@@ -424,6 +483,11 @@ export function HomepageMechanismModel({
       : smoothRange(progress, MODEL_CONFIG.scroll.motionStart, MODEL_CONFIG.scroll.motionEnd);
     const cycleCount = mobile ? MODEL_CONFIG.scroll.mobileCycles : MODEL_CONFIG.scroll.desktopCycles;
     const linkagePhase = linkageProgress * Math.PI * 2 * cycleCount;
+
+    for (const runtime of gearRuntimes) {
+      runtime.pivotGroup.rotation[runtime.config.axis] =
+        linkagePhase * runtime.config.direction;
+    }
 
     if (linkageRuntimes.length > 0) {
       const baseCrankAngle = linkageRuntimes[0].initialCrankAngle;

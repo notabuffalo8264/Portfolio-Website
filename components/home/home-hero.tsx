@@ -20,11 +20,12 @@ const HomepageMechanismCanvas = dynamic(
   },
 );
 
-function rangeProgress(progress: number, start: number, end: number) {
+function rangeProgress(progress: number, start: number, end: number): number {
+  if (end <= start) return progress >= end ? 1 : 0;
   return Math.min(1, Math.max(0, (progress - start) / (end - start)));
 }
 
-function smoothRange(progress: number, start: number, end: number) {
+function smoothRange(progress: number, start: number, end: number): number {
   const value = rangeProgress(progress, start, end);
   return value * value * (3 - 2 * value);
 }
@@ -147,18 +148,18 @@ export function HomeHero() {
               Kopiwoda
             </h1>
             <div className="mt-7 flex items-center gap-6 md:mt-10 md:gap-7">
-              <div className="relative h-32 w-28 shrink-0 overflow-hidden rounded-[14px] border border-border bg-surface md:h-40 md:w-32 md:rounded-2xl xl:h-48 xl:w-40">
+              <div className="relative h-[150px] w-[132px] shrink-0 overflow-hidden rounded-[14px] border border-border bg-surface md:h-48 md:w-[152px] md:rounded-2xl xl:h-56 xl:w-48">
                 <Image
                   src="/images/profile/profile.png"
                   alt="Portrait of Christopher Kopiwoda"
                   fill
                   priority
                   unoptimized
-                  sizes="(min-width: 1280px) 160px, (min-width: 768px) 128px, 112px"
+                  sizes="(min-width: 1280px) 192px, (min-width: 768px) 152px, 132px"
                   className="object-cover object-[52%_center]"
                 />
               </div>
-              <ul className="space-y-1.5 text-sm font-medium leading-snug text-foreground md:space-y-2 md:text-base">
+              <ul className="space-y-2 text-[17px] font-medium leading-snug text-foreground md:space-y-2.5 md:text-[19px]">
                 <li>Mechanical Engineering</li>
                 <li>Programming</li>
                 <li>Materials Research</li>
