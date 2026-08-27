@@ -36,10 +36,10 @@ export default async function Home() {
         <div className="content-width">
           <Reveal>
             <p className="technical-label text-accent-bright">01 / Overview</p>
-            <h2 className="section-title mt-5 max-w-4xl">{overview.frontmatter.title}</h2>
+            <h2 className="section-title mt-5 max-w-5xl">{overview.frontmatter.title}</h2>
           </Reveal>
-          <Reveal className="mt-8 max-w-3xl">
-            <article className="mdx-content text-lg leading-8">{overview.content}</article>
+          <Reveal className="mt-8 max-w-5xl lg:ml-12">
+            <article className="mdx-content text-lg leading-8 lg:text-xl lg:leading-9">{overview.content}</article>
           </Reveal>
         </div>
       </section>

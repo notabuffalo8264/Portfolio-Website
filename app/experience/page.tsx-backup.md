@@ -6,7 +6,7 @@ import { ExperienceEntry } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Experience",
-  description: "Professional experience, research, leadership, awards, activities, and technical capabilities.",
+  description: "Professional, research, leadership activities, and skills.",
 };
 
 const education: ExperienceEntry[] = [
@@ -16,82 +16,67 @@ const education: ExperienceEntry[] = [
     dates: "Expected May 2027",
     bullets: [
       "Minor in Materials Science Engineering",
-      "GPA: 3.82 / 4.00",
+      "GPA: 3.86 / 4.00",
       "Honors College",
       "Tau Beta Pi and Pi Tau Sigma Honor Societies",
-      "Planning to continue directly into an M.S. in Mechanical Engineering after completing the B.S.",
     ],
   },
 ];
 
 const professionalExperience: ExperienceEntry[] = [
   {
-    role: "Mechanical Engineering Intern",
-    org: "Grayhill · La Grange, IL",
-    dates: "May 18, 2026 — August 7, 2026",
-    bullets: [
-      "Designed a Creo-based continuity tester capable of checking approximately 56 electrical components in about 15 seconds, using 3D-printed prototypes and manufacturing drawings.",
-      "Built and soldered the electrical hardware for a 48-channel Chatterbox vibration-test monitoring system for approximately $80 in parts, avoiding another roughly $20,000 commercial purchase.",
-      "Programmed the Arduino-based Chatterbox to detect switch-state changes exceeding 10 µs, built a Python GUI, and validated timing with an oscilloscope and signal generator.",
-      "Developed Python static-analysis scripts to evaluate joystick-holder tipping force and guide mechanical dimensions.",
-      "Supported EMC testing, board programming, surface-mount soldering, optical encoder testing, troubleshooting, and resin/FDM 3D printing.",
-    ],
-  },
-  {
     role: "Math Learning Center Supervisor",
     org: "Michigan State University · East Lansing, MI",
-    dates: "September 2, 2025 — May 1, 2026",
+    dates: "September 2025 — Present",
     bullets: [
-      "Selected for advancement from Undergraduate Learning Assistant to Supervisor without applying for the role.",
-      "Supervised approximately 20 tutors across two semesters while coordinating Math Learning Center operations and resources.",
+      "Supervising MLC operations, coordinating tutors and managing resources to support student needs.",
     ],
   },
   {
     role: "Backend Developer",
     org: "Community Clockwork (Startup) · Chicago, IL (Remote)",
-    dates: "May 26, 2025 — August 8, 2025",
+    dates: "May 2025 — August 2025",
     bullets: [
-      "Created agentic workflows for HOA task automation using pretrained AI models, Pydantic, FastAPI, Docker, and PostgreSQL.",
-      "Migrated backend infrastructure from Google Cloud Functions to a Celery + Redis architecture in Python.",
-      "Helped build a working startup prototype before the team paused the project due to school and full-time work commitments.",
+      "Created agentic workflows for HOA task automation using pretrained AI models, Pydantic, FastAPI, Docker, and Postgres.",
+      "Migrated from Google Cloud Functions to a Celery + Redis solution in Python.",
     ],
   },
   {
     role: "Undergraduate Learning Assistant (ULA)",
     org: "Michigan State University · East Lansing, MI",
-    dates: "August 26, 2024 — April 26, 2025",
+    dates: "August 2024 — May 2025",
     bullets: [
-      "Taught four MTH 124 (Survey of Calculus I) recitation sections across two semesters, with approximately 20–30 students per section.",
-      "Provided in-class and out-of-class instruction and support before being selected for advancement to Math Learning Center Supervisor.",
+      "Taught recitations in MTH 124 (Survey of Calculus I), providing in-class and out-of-class support.",
     ],
   },
   {
     role: "Engineering Intern",
     org: "Jerome Resources · Plainfield, IL",
-    dates: "May 20, 2024 — August 9, 2024",
+    dates: "May 2024 — August 2024",
     bullets: [
       "Developed and updated CAD blueprints for company facilities.",
-      "Researched Chicago and Milwaukee food-waste sources for anaerobic-digestion projects and built Python web scrapers to collect brewery data.",
-      "Participated in a week-long Idaho site visit focused on converting agricultural waste into renewable methane and completed a professional safety certification.",
+      "Conducted comprehensive research to identify key sources of food waste in Chicago and Milwaukee.",
+      "Participated in a week-long site visit in Idaho to gain hands-on experience with anaerobic digestion processes, converting cow manure into renewable energy (methane).",
+      "Completed and passed a rigorous safety certification course in a professional setting with no prior preparation.",
     ],
   },
   {
     role: "Engineering Intern",
     org: "Sloan Valve Company · Franklin Park, IL",
-    dates: "July 11, 2022 — August 12, 2022",
+    dates: "July 2022 — August 2022",
     bullets: [
-      "Performed controlled drain-line carry testing across flushometer valve and toilet-bowl combinations, analyzing pressure and flow data in Excel.",
-      "Performed flow-meter calibration, reviewed test outliers, and authored a four-page Drain Line Carry Testing Guide documenting the full procedure.",
-      "Diagnosed malfunctions in a diaphragm life-testing machine and documented component wear during long-term testing.",
+      "Identified and resolved malfunctions in a specialized diaphragm life testing machine.",
+      "Documented wear-and-tear analysis for diaphragms undergoing testing.",
+      "Executed valve flushing procedures on various toilet bowls and processed data to compare distinctions and commonalities among different brands and models.",
     ],
   },
   {
     role: "Engineering Intern",
     org: "General Assembly & Manufacturing Corp. · Cary, IL",
-    dates: "July 7, 2021 — August 3, 2021",
+    dates: "July 2021 — August 2021",
     bullets: [
-      "Shadowed a lead engineer and participated in engineering design and manufacturing problem-solving discussions.",
-      "Supported manufacturing documentation by logging, preparing, and uploading images of production components.",
+      "Shadowed a lead engineer and participated in design and manufacturing problem-solving sessions.",
+      "Followed documentation and logging protocols while capturing, preparing, and uploading digital images of manufacturing components.",
     ],
   },
 ];
@@ -100,11 +85,11 @@ const researchExperience: ExperienceEntry[] = [
   {
     role: "NASA Michigan Space Grant Consortium Undergraduate Research Fellow",
     org: "Michigan State University · East Lansing, MI",
-    dates: "May 2026 — December 2026",
+    dates: "May 2026 — December 2026 (Upcoming)",
     bullets: [
-      "Awarded a NASA Michigan Space Grant Consortium (MSGC) Undergraduate Research Fellowship.",
-      "Fellowship research continues the Bi₂Se₃ crystal-growth work in the Zevalkink Group during Fall 2026.",
-      "Research focuses on thermoelectric materials, process development, and optical traveling zone crystal growth.",
+      "Selected for the NASA Michigan Space Grant Consortium (MSGC) Undergraduate Research Fellowship.",
+      "Continuing thermoelectric materials research in the Zevalkink Group focused on crystal growth of Bi₂Se₃.",
+      "Supporting NASA-related research initiatives in advanced energy and materials systems.",
     ],
     projectSlug: "bi2se3-ofz-ampule-growth-process",
     projectLabel: "Bi2Se3 Optical Traveling Zone Crystal Growth",
@@ -114,9 +99,7 @@ const researchExperience: ExperienceEntry[] = [
     org: "Dr. Zevalkink Group · Michigan State University",
     dates: "August 2025 — Present",
     bullets: [
-      "Developing an ampule-based optical traveling zone process for Bi₂Se₃ crystal growth using an Optical Floating Zone furnace.",
-      "Prepare high-purity materials, vacuum-seal quartz ampules, perform XRD characterization, and iterate growth parameters.",
-      "Calibrated furnace behavior and established approximately 40% optical power as a reproducible Bi₂Se₃ melting threshold for the research configuration.",
+      "Optimizing Optical Floating Zone Furnace techniques for Bi2Se3 single crystal growth.",
     ],
     projectSlug: "bi2se3-ofz-ampule-growth-process",
     projectLabel: "Bi2Se3 Optical Traveling Zone Crystal Growth",
@@ -126,8 +109,8 @@ const researchExperience: ExperienceEntry[] = [
     org: "Michigan State University",
     dates: "January 2025 — May 2025",
     bullets: [
-      "Calibrated the Optical Floating Zone furnace and developed the initial Bi₂Se₃ ampule-growth process, including material preparation and XRD analysis.",
-      "Authored an Optical Floating Zone Furnace Operator Manual covering setup, alignment, controls, safety, and ampule-based growth workflows.",
+      "Calibrated Optical Floating Zone Furnace and grew Bi2Se3 single crystals, including material preparation and XRD analysis.",
+      "Developed a user manual for an Optical Floating Zone Furnace, including mirror alignment, interface usage, and ampule-based crystal growth workflows.",
     ],
     projectSlug: "bi2se3-ofz-ampule-growth-process",
     projectLabel: "Bi2Se3 Optical Traveling Zone Crystal Growth",
@@ -141,9 +124,7 @@ const leadershipActivities: ExperienceEntry[] = [
     role: "University Undergraduate Research and Arts Forum Presenter (UURAF)",
     org: "Michigan State University",
     dates: "April 2025",
-    bullets: [
-      "Presented undergraduate Bi₂Se₃ crystal-growth research at MSU's University Undergraduate Research and Arts Forum.",
-    ],
+    bullets: ["Presented undergraduate research outcomes in a university forum setting."],
     projectSlug: "bi2se3-ofz-ampule-growth-process",
     projectLabel: "Bi2Se3 Optical Traveling Zone Crystal Growth",
   },
@@ -152,17 +133,19 @@ const leadershipActivities: ExperienceEntry[] = [
     org: "Michigan State University",
     dates: "March 2025",
     bullets: [
-      "Won the Accessibility & Inclusivity Design Track and the Organizer's Favorite Award with Yolkey.",
+      "Won the Accessibility and Inclusion Track",
+      "Won the Organizer's Favorite Award",
     ],
     projectSlug: "yolkey",
     projectLabel: "Yolkey",
   },
   {
-    role: "SpartaHack X Sustainability Track Winner",
+    role: "Spartahack X Hackathon Winner",
     org: "Michigan State University",
     dates: "February 2025",
     bullets: [
-      "Won the Sustainability Track with Ghomeo at a hackathon with 498 participants from 38 schools.",
+      "Won the sustainability track.",
+      "Competed against 498 participants from 38 schools.",
     ],
     projectSlug: "ghomeo",
     projectLabel: "Ghomeo",
@@ -170,28 +153,24 @@ const leadershipActivities: ExperienceEntry[] = [
   {
     role: "Engineering Outreach Volunteer",
     org: "College of Engineering · Michigan State University",
-    dates: "February 2025, February 2026",
+    dates: "Feb 2025, Feb 2026",
     bullets: [
-      "Supported Engineering Exploration Day and Introduce a Girl to Engineering Day as a track helper.",
-      "Assisted with a hands-on Materials Science Engineering activity station for visiting K–12 and prospective students.",
+      "Served as a track helper for MSU engineering outreach events including Engineering Exploration Day and Introduce a Girl to Engineering Day.",
+      "Assisted with hands-on materials science engineering activity station for visiting K–12 and prospective students.",
     ],
   },
   {
     role: "Executive Board Member",
     org: "Pool Club (Registered Student Organization)",
     dates: "November 2024 — Present",
-    bullets: [
-      "Serve on the executive board of an MSU registered student organization.",
-    ],
+    bullets: ["Serving on the student organization executive board."],
   },
   {
-    role: "Founder, Chicago Chapter",
+    role: "Founder of Chicago Chapter",
     org: "Kids Serving Kids",
     dates: "May 2021 — February 2026",
-    bullets: [
-      "Established and led the Chicago chapter of the organization.",
-    ],
-  },
+    bullets: ["Established and led the Chicago chapter of the organization."],
+  }
 ];
 
 function TooltipTerm({ term, description }: { term: string; description: string }) {
@@ -260,7 +239,7 @@ function UurafRoleTitle() {
 function MsgcBulletText() {
   return (
     <>
-      Awarded a NASA Michigan Space Grant Consortium ({" "}
+      Selected for the NASA Michigan Space Grant Consortium ({" "}
       <TooltipTerm
         term="MSGC"
         description="The Michigan Space Grant Consortium is a NASA-funded program that supports student research, education, and workforce development in science, engineering, and space-related fields."
@@ -300,7 +279,7 @@ function Timeline({ title, entries }: { title: string; entries: ExperienceEntry[
                     <HonorsCollegeTooltip />
                   ) : title === "Education" && bullet === "Tau Beta Pi and Pi Tau Sigma Honor Societies" ? (
                     <HonorSocietiesTooltipLine />
-                  ) : bullet === "Awarded a NASA Michigan Space Grant Consortium (MSGC) Undergraduate Research Fellowship." ? (
+                  ) : bullet === "Selected for the NASA Michigan Space Grant Consortium (MSGC) Undergraduate Research Fellowship." ? (
                     <MsgcBulletText />
                   ) : (
                     bullet
@@ -338,7 +317,7 @@ export default function ExperiencePage() {
     <main className="container-page space-y-20 pt-32">
       <header className="content-width border-b border-border pb-14">
         <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.95] tracking-[-0.06em]">Experience</h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">A more complete view of my professional experience, research, leadership, awards, and technical work beyond the one-page resume.</p>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">Expanded experience and technical contributions beyond the one-page resume.</p>
       </header>
 
       <div className="content-width space-y-20">

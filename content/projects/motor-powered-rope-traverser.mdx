@@ -1,0 +1,88 @@
+---
+title: "Motor-Powered Rope Traverser"
+slug: "motor-powered-rope-traverser"
+date: "2026-04-29"
+category: "Mechanical Engineering"
+featured: true
+summary: "Designed and built a motor-powered rope climbing robot using dual four-bar linkages, combining CAD, machining, FEA, and rapid prototyping into a complete mechanical engineering project."
+heroImage: "/projects/motor-powered-rope-traverser/images/model_pic.png"
+heroAspect: "3 / 2"
+heroFit: "cover"
+heroPosition: "center 35%"
+cardImageFit: "cover"
+cardImagePosition: "center 35%"
+---
+
+### How This Started
+
+This was the final project for **ME 470: Mechanical Design and Manufacturing II** at Michigan State University. Our team of four was challenged to design and build a robot capable of autonomously traversing a suspended 10-meter rope while fitting inside a standard shoebox before deployment.
+
+The project took us through the complete engineering process—from brainstorming and CAD to machining, manufacturing, testing, and plenty of redesigns along the way.
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Team Size" value="4 Students" />
+  <MetricCard label="Mechanism" value="Dual Four-Bar Linkages" />
+  <MetricCard label="Manufacturing" value="Machining + 3D Printing" />
+</div>
+
+## The Design
+
+Our robot used two synchronized **Grashof four-bar linkages** that alternated gripping and pulling along the rope. A DC motor powered both linkage systems through a gear reduction, converting continuous rotation into a walking motion.
+
+Over the semester we continuously refined nearly every part of the design, adjusting the linkage geometry, improving packaging, redesigning components, and manufacturing multiple iterations until we had a robot that was ready for Design Day.
+
+## My Contributions
+
+I spent most of my time working on the mechanical design of the robot.
+
+Some of my main contributions included:
+
+- Creating and updating much of the CAD as the design evolved throughout the semester.
+- Using my personal 3D printer to manufacture many of the custom plastic parts, allowing us to quickly prototype new revisions.
+- Performing the complete **finite element analysis (FEA)** of the drive shaft in Abaqus and comparing the results against analytical calculations.
+- Helping machine, assemble, and test the final robot leading up to Design Day.
+
+## Biggest Challenge
+
+One of the biggest goals throughout the project was making the four-bar linkage move as smoothly as possible. We spent most of the semester refining the geometry until the motion looked great—but there was one problem: the robot had become far too slow.
+
+With only a few weeks remaining before Design Day, we decided to redesign a large portion of the project. That meant updating the CAD, machining new parts, reprinting nearly every custom component, and rebuilding the robot under a very tight deadline.
+
+It made for a stressful final stretch, but it was also one of the most rewarding parts of the project. Watching the redesigned robot finally come together after so many late nights made all of the extra work worth it.
+
+## Design Report
+
+The full report includes the design process, engineering calculations, kinematic analysis, FEA results, manufacturing drawings, and Design Day testing.
+
+<a href="/projects/motor-powered-rope-traverser/downloads/ME470_Final_Report.pdf" target="_blank" rel="noreferrer">
+View Final Design Report (PDF)
+</a>
+
+## Media & Documentation
+
+### Project Gallery
+
+<ImageCarousel imagesJson='[
+  {"src":"/projects/motor-powered-rope-traverser/images/model_pic.png","alt":"Completed rope traversing robot"},
+  {"src":"/projects/motor-powered-rope-traverser/images/model_assem.png","alt":"SOLIDWORKS assembly"},
+  {"src":"/projects/motor-powered-rope-traverser/images/Mises_FEA.png","alt":"Von Mises FEA analysis"}
+]' />
+
+### Supporting Documents
+
+- <a href="/projects/motor-powered-rope-traverser/downloads/ME_470_Report_(Final).pdf" target="_blank" rel="noreferrer">Motor Powered Rope Traverser Report (PDF)</a>
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">SOLIDWORKS</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">MATLAB</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Abaqus</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">3D Printing</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Milling Machine</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Lathe</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Drill Press</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Four-Bar Mechanism Design</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Finite Element Analysis</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Rapid Prototyping</span>
+</div>

@@ -1,0 +1,113 @@
+---
+inProduction: true
+title: "Self-Hosted Home Server"
+slug: "self-hosted-home-server"
+date: "2026-08-25"
+category: "Software"
+featured: true
+summary: "Built a self-hosted Linux home server from a refurbished Lenovo ThinkCentre for automation, local AI, dashboards, Jellyfin media storage, remote access, and lightweight game hosting."
+heroImage: "/projects/self-hosted-home-server/images/hero.jpg"
+heroAspect: "3 / 2"
+heroFit: "cover"
+heroPosition: "center center"
+cardImageFit: "cover"
+cardImagePosition: "center center"
+---
+
+### How This Started
+
+This started because I wanted a real server to experiment with instead of running everything on my main desktop.
+
+I bought a refurbished **Lenovo ThinkCentre M720 SFF** for around $200 and turned it into a headless Ubuntu server. At first, the goal was mostly game hosting, but it quickly became a much broader home lab for Docker apps, automation, local AI, dashboards, remote access, and media storage.
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Server" value="Lenovo M720 SFF" />
+  <MetricCard label="CPU" value="i7-9700 / 8 Cores" />
+  <MetricCard label="Storage" value="8 TB External + Internal Drives" />
+</div>
+
+## What It Runs
+
+The server is a mix of Docker containers, native Linux services, and a few tools running directly on Ubuntu.
+
+Main services include:
+
+- **Glance** for my custom server dashboard
+- **Portainer** for Docker management
+- **n8n** for self-hosted automations
+- **Ollama + Qwen** for local AI workflows
+- **Jellyfin** for my media library
+- **CubeCoders AMP** for lightweight game-server management
+- **Tailscale** for private remote access
+
+I also added an **8 TB external drive** for Jellyfin and use it to store movies scraped from physical disks.
+
+## Custom Dashboard
+
+One of the most useful parts of the server is the **Glance** dashboard.
+
+I built a dedicated Home Server page so I could see the things I actually care about in one place: system stats, storage, Docker containers, service links, management pages, and server status.
+
+I also made a small Python service that pulls information from the **AMP API** and exposes it as JSON for Glance. It was a small feature, but it made the dashboard feel much more custom because it connects a native Linux service, Docker networking, an API, and my dashboard together.
+
+## Automation and Local AI
+
+I self-host **n8n** so I can build automations that run on my own server instead of relying on a cloud workflow tool.
+
+I also installed **Ollama** with a small Qwen model so some workflows can use local AI. Since the server is CPU-only, I had to keep the setup realistic: smaller model, careful prompt sizes, and workflows that do not require tons of parallel requests.
+
+One of the workflows I built around this is an AI-assisted email categorizer. It pulls messages from Fastmail through JMAP, sends the useful parts to the local model, and applies labels without giving the automation permission to delete, archive, or send mail.
+
+## Remote Access and Security
+
+I wanted the server to be useful remotely, but I did not want every admin page exposed to the public internet.
+
+Most management happens through **SSH**, **VS Code Remote SSH**, and **Tailscale**. That lets me access the server from my desktop, laptop, or phone while keeping dashboards and admin tools private.
+
+This part of the project taught me a lot about ports, firewall rules, Docker networking, host-to-container communication, and deciding which services should actually be public.
+
+## Jellyfin Media Server
+
+I also set up **Jellyfin** with an attached **8 TB external drive**.
+
+This gives me a self-hosted media library for movies scraped from disks, while also giving the server a practical everyday use beyond experiments and dashboards. It added another layer to the project: Linux drive mounting, storage organization, media folders, and keeping a media service running alongside the rest of the stack.
+
+## Why I Like This Project
+
+The best part of this project is that it keeps growing.
+
+It started as a cheap refurbished desktop, but now it acts like a small personal infrastructure platform. I can host apps, test automations, run local AI workflows, manage media, experiment with networking, and keep adding new services as I think of them.
+
+It has been one of the most useful projects I have built because it is not just something I finished once. It is something I actually use and keep improving.
+
+## Media & Documentation
+
+### Project Gallery
+
+<ImageCarousel imagesJson='[
+  {"src":"/projects/self-hosted-home-server/images/glance-dashboard.jpg","alt":"Custom Glance home server dashboard"},
+  {"src":"/projects/self-hosted-home-server/images/portainer.jpg","alt":"Portainer Docker container management"},
+  {"src":"/projects/self-hosted-home-server/images/n8n-workflow.jpg","alt":"n8n automation workflow running on the home server"},
+  {"src":"/projects/self-hosted-home-server/images/jellyfin-library.jpg","alt":"Jellyfin media library running on the home server"}
+]' />
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Ubuntu Linux</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Docker</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Docker Compose</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Portainer</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Glance</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">n8n</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Ollama</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Qwen</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Jellyfin</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">CubeCoders AMP</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Python</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">REST APIs</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">systemd</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">SSH</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Tailscale</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Fastmail JMAP</span>
+</div>

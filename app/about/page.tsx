@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import Image from "next/image";
 import { compileMDX } from "next-mdx-remote/rsc";
+import { notFound } from "next/navigation";
 import { mdxComponents } from "@/components/mdx-components";
 
 export const metadata: Metadata = {
@@ -22,6 +23,8 @@ async function getBioContent() {
 }
 
 export default async function AboutPage() {
+  notFound();
+
   const bio = await getBioContent();
 
   return (
