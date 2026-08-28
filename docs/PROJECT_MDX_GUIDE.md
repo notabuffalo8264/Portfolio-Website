@@ -41,6 +41,8 @@ date: "2026-03-02"
 # inProduction: true
 category: "Research"
 featured: true
+# Optional homepage order among featured projects; lower numbers appear first.
+featuredOrder: 1
 summary: "1-2 sentence summary used on cards and on the project page intro."
 heroImage: "/projects/project-slug/images/hero.jpg"
 
@@ -94,6 +96,12 @@ Project cards on the all-projects screen can be controlled independently:
   - `contain` = show full image, may letterbox
 - `cardImagePosition`: thumbnail focal point when using `cover`
   - Use two values for clearer control, e.g. `"center 20%"`, `"50% 70%"`, `"left center"`
+
+Featured projects on the home page can be ordered explicitly:
+
+- Add `featuredOrder` to each featured project.
+- Lower numbers appear first (`1`, `2`, `3`, etc.).
+- Projects without `featuredOrder` sort after explicitly ordered projects, using their date order.
 
 Optional top links (best for software projects):
 

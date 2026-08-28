@@ -20,6 +20,7 @@ export type ProjectFrontmatter = {
   inProduction?: boolean;
   category: ProjectCategory;
   featured: boolean;
+  featuredOrder?: number;
   summary: string;
   heroImage: string;
   heroAspect?: string;

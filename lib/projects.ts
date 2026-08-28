@@ -51,6 +51,7 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
 
   const heroFit = frontmatter.heroFit === "contain" ? "contain" : "cover";
   const cardImageFit = frontmatter.cardImageFit === "contain" ? "contain" : "cover";
+  const featuredOrder = Number(frontmatter.featuredOrder);
 
   return {
     title: String(frontmatter.title ?? "Untitled Project"),
@@ -59,6 +60,7 @@ function normalizeFrontmatter(frontmatter: Record<string, unknown>): ProjectFron
     inProduction: Boolean(frontmatter.inProduction),
     category,
     featured: Boolean(frontmatter.featured),
+    featuredOrder: Number.isFinite(featuredOrder) ? featuredOrder : undefined,
     summary: String(frontmatter.summary ?? ""),
     heroImage: String(frontmatter.heroImage ?? "/projects/_shared/images/project-placeholder.svg"),
     heroAspect: String(frontmatter.heroAspect ?? ""),
@@ -92,7 +94,10 @@ export const getAllProjects = cache(async (): Promise<Project[]> => {
 
 export async function getFeaturedProjects(limit = 6): Promise<Project[]> {
   const projects = await getAllProjects();
-  return projects.filter((project) => project.featured).slice(0, limit);
+  return projects
+    .filter((project) => project.featured)
+    .sort((a, b) => (a.featuredOrder ?? Number.POSITIVE_INFINITY) - (b.featuredOrder ?? Number.POSITIVE_INFINITY))
+    .slice(0, limit);
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {

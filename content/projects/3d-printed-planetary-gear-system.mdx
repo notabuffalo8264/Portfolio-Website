@@ -1,0 +1,100 @@
+---
+title: "3D-Printed Planetary Gear System"
+slug: "3d-printed-planetary-gear-system"
+date: "2026-04-09"
+category: "Mechanical Engineering"
+featured: true
+featuredOrder: 4
+summary: "Designed, analyzed, and 3D printed a functional planetary gear mechanism as an honors option project, combining CAD, Python modeling, motion simulation, and physical testing."
+heroImage: "/projects/3d-printed-planetary-gear-system/images/assembled-gear-system.jpg"
+heroAspect: "3 / 2"
+heroFit: "cover"
+heroPosition: "center center"
+cardImageFit: "cover"
+cardImagePosition: "center center"
+---
+
+### How This Started
+
+This was my **ME 470 Honors Option Project** for Mechanical Design and Manufacturing II at Michigan State University.
+
+I wanted to make something that was more than just a written analysis, so I designed and built a small **planetary gear system** that could physically demonstrate gear reduction and torque amplification. The final project combined the theory side of gear trains with CAD, simulation, and a 3D-printed working model.
+
+<div className="mt-4 grid gap-3 sm:grid-cols-3">
+  <MetricCard label="Project Type" value="Honors Option" />
+  <MetricCard label="Mechanism" value="Planetary Gear Set" />
+  <MetricCard label="Manufacturing" value="FDM 3D Printing" />
+</div>
+
+## What I Made
+
+The mechanism includes a sun gear, planet gears, ring gear, carrier, base, and knob. I designed the parts in **SOLIDWORKS**, checked the gear relationships with a small **Python model**, and then used a SolidWorks motion study to verify that the CAD behaved the way I expected.
+
+After that, I printed the parts in **PLA-CF** and assembled the physical gear system. The final model was self-contained and could be spun by hand to show the motion of the planetary gear train.
+
+## My Contributions
+
+Since this was an individual honors option project, I completed the full process myself:
+
+- Designed the planetary gear assembly and individual parts in SOLIDWORKS.
+- Created a Python model to compare gear configurations before finalizing the design.
+- Ran a SolidWorks motion study to verify the expected gear motion.
+- 3D printed the mechanism using PLA-CF filament.
+- Assembled and tested the physical gear system by hand.
+- Wrote the final report documenting the design, analysis, CAD, manufacturing, and testing process.
+
+## Building the Physical Model
+
+The main challenge was making the gears work well after printing. Since 3D printing introduces small tolerance errors, the design needed enough clearance to avoid binding while still keeping the teeth engaged cleanly.
+
+Once everything was printed, I laid out the individual parts, assembled the carrier and planet gears, and tested the mechanism by rotating it by hand. The finished model showed the expected gear motion and gave me a much better physical understanding of how planetary gear trains behave.
+
+## Motion Validation
+
+I also created a CAD motion study so I could compare the digital model against the physical one. The CAD version helped confirm that the gear mates and motion relationships were working before relying on the printed parts.
+
+This made the project feel more complete because it was not just a printed model — it connected the analysis, simulation, and real hardware into one working demonstration.
+
+## Media & Documentation
+
+### Project Gallery
+
+<ImageCarousel imagesJson='[
+  {"src":"/projects/3d-printed-planetary-gear-system/images/parts-layout.jpg","alt":"Individual 3D printed planetary gear system parts laid out before assembly"},
+  {"src":"/projects/3d-printed-planetary-gear-system/images/assembled-gear-system.jpg","alt":"Assembled 3D printed planetary gear mechanism"},
+  {"src":"/projects/3d-printed-planetary-gear-system/images/assembly-drawing.png","alt":"SOLIDWORKS assembly drawing of the planetary gear mechanism"}
+]' />
+
+### Videos
+
+<div className="mt-4 grid gap-4 md:grid-cols-2">
+  <video controls className="w-full rounded-xl border border-border bg-surface-muted">
+    <source src="/projects/3d-printed-planetary-gear-system/videos/physical-assembly-demo.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <video controls className="w-full rounded-xl border border-border bg-surface-muted">
+    <source src="/projects/3d-printed-planetary-gear-system/videos/cad-motion-study.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+### Design Report
+
+The full report includes the gear analysis, Python model, SolidWorks motion study, manufacturing notes, CAD drawings, and final testing.
+
+<a href="/projects/3d-printed-planetary-gear-system/downloads/Final_Report.pdf" target="_blank" rel="noreferrer">
+View Final Report (PDF)
+</a>
+
+## Tools Used
+
+<div className="mt-4 flex flex-wrap gap-2">
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">SOLIDWORKS</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Python</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">3D Printing</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">PLA-CF</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Motion Study</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Gear Design</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Rapid Prototyping</span>
+</div>

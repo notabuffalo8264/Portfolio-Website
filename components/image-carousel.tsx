@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 type Slide = {
   src: string;
@@ -32,12 +32,7 @@ export function ImageCarousel({ imagesJson }: ImageCarouselProps) {
   }, [imagesJson]);
 
   const [index, setIndex] = useState(0);
-
-  if (slides.length === 0) {
-    return null;
-  }
-
-  const current = slides[index];
+  const [isExpanded, setIsExpanded] = useState(false);
 
   function previous() {
     setIndex((value) => (value === 0 ? slides.length - 1 : value - 1));
@@ -47,10 +42,47 @@ export function ImageCarousel({ imagesJson }: ImageCarouselProps) {
     setIndex((value) => (value === slides.length - 1 ? 0 : value + 1));
   }
 
+  useEffect(() => {
+    if (!isExpanded) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsExpanded(false);
+      } else if (event.key === "ArrowLeft") {
+        setIndex((value) => (value === 0 ? slides.length - 1 : value - 1));
+      } else if (event.key === "ArrowRight") {
+        setIndex((value) => (value === slides.length - 1 ? 0 : value + 1));
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isExpanded, slides.length]);
+
+  if (slides.length === 0) {
+    return null;
+  }
+
+  const current = slides[index];
+
   return (
     <div className="mt-6 space-y-3">
       <div className="relative h-72 overflow-hidden rounded-xl border border-border bg-black/5 sm:h-96">
-        <Image src={current.src} alt={current.alt} fill className="object-contain p-2" />
+        <button
+          type="button"
+          onClick={() => setIsExpanded(true)}
+          aria-label={`Enlarge image: ${current.alt}`}
+          className="absolute inset-0 z-0 cursor-zoom-in"
+        >
+          <Image src={current.src} alt={current.alt} fill className="object-contain p-2" />
+        </button>
 
         <button
           type="button"
@@ -70,6 +102,53 @@ export function ImageCarousel({ imagesJson }: ImageCarouselProps) {
           <ChevronRight size={16} />
         </button>
       </div>
+
+      {isExpanded && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Expanded project gallery"
+          className="fixed inset-0 z-50 flex min-h-screen flex-col bg-black/95 p-4 sm:p-8"
+        >
+          <div className="flex items-center justify-between text-white">
+            <p className="text-sm text-white/70">
+              {index + 1} / {slides.length}
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsExpanded(false)}
+              aria-label="Close expanded gallery"
+              className="rounded-full border border-white/20 bg-white/10 p-2 transition hover:bg-white/20"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <div className="relative flex min-h-0 flex-1 items-center justify-center py-4 sm:py-8">
+            <Image src={current.src} alt={current.alt} fill className="object-contain" sizes="100vw" />
+
+            <button
+              type="button"
+              onClick={previous}
+              aria-label="Previous image"
+              className="absolute left-0 rounded-full border border-white/20 bg-white/10 p-3 text-white transition hover:bg-white/20 sm:left-4"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            <button
+              type="button"
+              onClick={next}
+              aria-label="Next image"
+              className="absolute right-0 rounded-full border border-white/20 bg-white/10 p-3 text-white transition hover:bg-white/20 sm:right-4"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+
+          <p className="truncate text-center text-sm text-white/70">{current.alt}</p>
+        </div>
+      )}
 
       <div className="flex items-center justify-between gap-3">
         <p className="text-xs text-foreground/70">

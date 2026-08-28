@@ -1,12 +1,12 @@
 ---
-inProduction: true
 title: "Self-Hosted Home Server"
 slug: "self-hosted-home-server"
-date: "2026-08-25"
+date: "2026-08-28"
 category: "Software"
 featured: true
-summary: "Built a self-hosted Linux home server from a refurbished Lenovo ThinkCentre for automation, local AI, dashboards, Jellyfin media storage, remote access, and lightweight game hosting."
-heroImage: "/projects/self-hosted-home-server/images/hero.jpg"
+featuredOrder: 3
+summary: "Built a self-hosted Linux home server from a refurbished Lenovo ThinkCentre for automation, local AI, dashboards, private file sharing, DNS filtering, Jellyfin media storage, and secure remote access."
+heroImage: "/projects/self-hosted-home-server/images/home-server-dashboard.png"
 heroAspect: "3 / 2"
 heroFit: "cover"
 heroPosition: "center center"
@@ -18,12 +18,12 @@ cardImagePosition: "center center"
 
 This started because I wanted a real server to experiment with instead of running everything on my main desktop.
 
-I bought a refurbished **Lenovo ThinkCentre M720 SFF** for around $200 and turned it into a headless Ubuntu server. At first, the goal was mostly game hosting, but it quickly became a much broader home lab for Docker apps, automation, local AI, dashboards, remote access, and media storage.
+I bought a refurbished **Lenovo ThinkCentre M720 SFF** for around $200 and turned it into a headless Ubuntu server. At first, the goal was mostly game hosting, but it quickly became a broader home lab for Docker apps, automation, local AI, dashboards, remote access, DNS filtering, file sharing, and media storage.
 
 <div className="mt-4 grid gap-3 sm:grid-cols-3">
   <MetricCard label="Server" value="Lenovo M720 SFF" />
   <MetricCard label="CPU" value="i7-9700 / 8 Cores" />
-  <MetricCard label="Storage" value="8 TB External + Internal Drives" />
+  <MetricCard label="Storage" value="8 TB Media + Internal HDD" />
 </div>
 
 ## What It Runs
@@ -32,51 +32,56 @@ The server is a mix of Docker containers, native Linux services, and a few tools
 
 Main services include:
 
-- **Glance** for my custom server dashboard
+- **Glance** for my custom startpage and server dashboard
 - **Portainer** for Docker management
 - **n8n** for self-hosted automations
 - **Ollama + Qwen** for local AI workflows
 - **Jellyfin** for my media library
+- **Pi-hole** for network-wide DNS filtering
+- **FileBrowser Quantum** for temporary public file sharing
+- **Samba** for private file access over Tailscale
 - **CubeCoders AMP** for lightweight game-server management
 - **Tailscale** for private remote access
 
-I also added an **8 TB external drive** for Jellyfin and use it to store movies scraped from physical disks.
+The server also has an **8 TB external media drive** for Jellyfin and a separate internal HDD setup for personal storage, backups, and capped public sharing.
 
 ## Custom Dashboard
 
-One of the most useful parts of the server is the **Glance** dashboard.
+One of the most useful parts of the project is the **Glance** dashboard.
 
-I built a dedicated Home Server page so I could see the things I actually care about in one place: system stats, storage, Docker containers, service links, management pages, and server status.
+I built a dedicated Home Server page so I could see the things I actually care about in one place: system stats, storage, network status, security status, Docker services, Jellyfin activity, Pi-hole DNS stats, AI/n8n status, and useful management links.
 
-I also made a small Python service that pulls information from the **AMP API** and exposes it as JSON for Glance. It was a small feature, but it made the dashboard feel much more custom because it connects a native Linux service, Docker networking, an API, and my dashboard together.
+I also built small Python helper services that expose custom server data to Glance. These pull from tools like AMP, Pi-hole, Jellyfin, FileBrowser, and system services so the dashboard feels more like a real control panel than a basic bookmark page.
 
 ## Automation and Local AI
 
-I self-host **n8n** so I can build automations that run on my own server instead of relying on a cloud workflow tool.
+I self-host **n8n** so I can build automations that run on my own server instead of relying only on cloud workflow tools.
 
-I also installed **Ollama** with a small Qwen model so some workflows can use local AI. Since the server is CPU-only, I had to keep the setup realistic: smaller model, careful prompt sizes, and workflows that do not require tons of parallel requests.
+I also installed **Ollama** with a small Qwen model so some workflows can use local AI. Since the server is CPU-only, I kept the setup realistic: smaller model, careful prompt sizes, and workflows that do not need a ton of parallel requests.
 
-One of the workflows I built around this is an AI-assisted email categorizer. It pulls messages from Fastmail through JMAP, sends the useful parts to the local model, and applies labels without giving the automation permission to delete, archive, or send mail.
+One workflow I built around this is an AI-assisted email categorizer. It pulls messages from Fastmail through JMAP, sends the useful parts to the local model, and applies labels without giving the automation permission to delete, archive, or send mail.
+
+## Storage, Media, and File Sharing
+
+I set up **Jellyfin** with an attached **8 TB external drive** for media storage.
+
+I use it to organize and stream a personal media library made from physical disks, along with home videos and home photos. The server uses Intel Quick Sync hardware transcoding, so playback and conversion work is handled by the i7-9700's integrated graphics instead of relying only on the CPU.
+
+I also configured the internal HDD for private and shared storage. Personal files and backups are available through **Samba** over Tailscale, while **FileBrowser Quantum** is used for temporary public sharing through a **Cloudflare Tunnel** at my own domain. The public shared folder is hard-capped so uploads cannot fill the entire drive.
 
 ## Remote Access and Security
 
 I wanted the server to be useful remotely, but I did not want every admin page exposed to the public internet.
 
-Most management happens through **SSH**, **VS Code Remote SSH**, and **Tailscale**. That lets me access the server from my desktop, laptop, or phone while keeping dashboards and admin tools private.
+Most management happens through **SSH**, **VS Code Remote SSH**, and **Tailscale**. Admin tools like Portainer, Glance, n8n, Jellyfin, AMP, Samba, and Pi-hole stay private on my LAN or Tailscale network.
 
-This part of the project taught me a lot about ports, firewall rules, Docker networking, host-to-container communication, and deciding which services should actually be public.
-
-## Jellyfin Media Server
-
-I also set up **Jellyfin** with an attached **8 TB external drive**.
-
-This gives me a self-hosted media library for movies scraped from disks, while also giving the server a practical everyday use beyond experiments and dashboards. It added another layer to the project: Linux drive mounting, storage organization, media folders, and keeping a media service running alongside the rest of the stack.
+The only things intended for public access are specific services that need it, like temporary FileBrowser shares through Cloudflare Tunnel or a game-server port when needed. This part of the project taught me a lot about firewall rules, ports, Docker networking, host-to-container communication, DNS, and deciding what should actually be public.
 
 ## Why I Like This Project
 
 The best part of this project is that it keeps growing.
 
-It started as a cheap refurbished desktop, but now it acts like a small personal infrastructure platform. I can host apps, test automations, run local AI workflows, manage media, experiment with networking, and keep adding new services as I think of them.
+It started as a cheap refurbished desktop, but now it acts like a small personal infrastructure platform. I can host apps, test automations, run local AI workflows, manage media, share files, filter DNS, experiment with networking, and keep adding new services as I think of them.
 
 It has been one of the most useful projects I have built because it is not just something I finished once. It is something I actually use and keep improving.
 
@@ -85,10 +90,15 @@ It has been one of the most useful projects I have built because it is not just 
 ### Project Gallery
 
 <ImageCarousel imagesJson='[
-  {"src":"/projects/self-hosted-home-server/images/glance-dashboard.jpg","alt":"Custom Glance home server dashboard"},
-  {"src":"/projects/self-hosted-home-server/images/portainer.jpg","alt":"Portainer Docker container management"},
-  {"src":"/projects/self-hosted-home-server/images/n8n-workflow.jpg","alt":"n8n automation workflow running on the home server"},
-  {"src":"/projects/self-hosted-home-server/images/jellyfin-library.jpg","alt":"Jellyfin media library running on the home server"}
+  {"src":"/projects/self-hosted-home-server/images/physical-server.jpg","alt":"Physical Lenovo ThinkCentre home server"},
+  {"src":"/projects/self-hosted-home-server/images/home-server-dashboard.png","alt":"Custom Glance Home Server dashboard"},
+  {"src":"/projects/self-hosted-home-server/images/startpage.png","alt":"Custom Glance startpage"},
+  {"src":"/projects/self-hosted-home-server/images/portainer.png","alt":"Portainer Docker management dashboard"},
+  {"src":"/projects/self-hosted-home-server/images/n8n.png","alt":"n8n automation workflow"},
+  {"src":"/projects/self-hosted-home-server/images/jellyfin.png","alt":"Jellyfin media library"},
+  {"src":"/projects/self-hosted-home-server/images/pi-hole.png","alt":"Pi-hole DNS filtering dashboard"},
+  {"src":"/projects/self-hosted-home-server/images/filebrowser-quantum.png","alt":"FileBrowser Quantum shared storage interface"},
+  {"src":"/projects/self-hosted-home-server/images/cubecoders-amp.png","alt":"Cube Coders AMP game server dashboard"}
 ]' />
 
 ## Tools Used
@@ -103,11 +113,14 @@ It has been one of the most useful projects I have built because it is not just 
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Ollama</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Qwen</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Jellyfin</span>
-  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">CubeCoders AMP</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Pi-hole</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">FileBrowser Quantum</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Cloudflare Tunnel</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Samba</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Tailscale</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Python</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">REST APIs</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">systemd</span>
-  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">SSH</span>
-  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Tailscale</span>
   <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">Fastmail JMAP</span>
+  <span className="rounded-full bg-surface-muted px-3 py-1 text-xs">CubeCoders AMP</span>
 </div>

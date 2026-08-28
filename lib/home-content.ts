@@ -1,6 +1,11 @@
 export const homeContent = {
   experiencePreview: [
     {
+      role: "Mechanical Engineering Intern",
+      org: "Grayhill · La Grange, IL",
+      dates: "May 2026 — August 2026",
+    },
+    {
       role: "NASA Michigan Space Grant Consortium Undergraduate Research Fellow",
       org: "Michigan State University",
       dates: "May 2026 — December 2026",
@@ -8,12 +13,7 @@ export const homeContent = {
     {
       role: "Math Learning Center Supervisor",
       org: "Michigan State University",
-      dates: "September 2025 — Present",
-    },
-    {
-      role: "Research Assistant",
-      org: "Dr. Zevalkink Group · Michigan State University",
-      dates: "August 2025 — Present",
+      dates: "September 2025 — May 2026",
     },
   ],
   capabilities: [
@@ -22,17 +22,20 @@ export const homeContent = {
       items: [
         "SolidWorks",
         "Creo",
-        "NX",
+        "Siemens NX",
         "Fusion 360",
-        "Abaqus",
-        "Technical Documentation",
+        "Abaqus / FEA",
+        "MATLAB",
+        "Manufacturing Drawings",
       ],
     },
     {
       title: "Manufacturing & Prototyping",
       items: [
+        "Machining",
         "FDM & Resin 3D Printing",
         "Prototype Fabrication",
+        "Soldering",
         "Blender",
       ],
     },
@@ -40,8 +43,9 @@ export const homeContent = {
       title: "Materials Research",
       items: [
         "Materials Synthesis",
-        "Single Crystal Growth",
+        "Single-Crystal Growth",
         "XRD Analysis",
+        "Optical Floating Zone Processing",
       ],
     },
     {
@@ -50,13 +54,12 @@ export const homeContent = {
         "Python",
         "C++",
         "Java",
-        "MATLAB",
-        "Git",
-        "GitHub",
-        "Linux Server Management",
-        "VS Code",
-        "LaTeX",
+        "Docker",
+        "Linux",
         "n8n",
+        "LLM Applications",
+        "GitHub",
+        "LaTeX",
       ],
     },
   ],
