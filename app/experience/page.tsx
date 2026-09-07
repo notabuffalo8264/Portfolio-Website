@@ -27,7 +27,7 @@ const education: ExperienceEntry[] = [
 const professionalExperience: ExperienceEntry[] = [
   {
     role: "Mechanical Engineering Intern",
-    org: "Grayhill · La Grange, IL",
+    org: "Grayhill, Inc. · La Grange, IL",
     dates: "May 18, 2026 — August 7, 2026",
     bullets: [
       "Designed a Creo-based continuity tester capable of checking approximately 56 electrical components in about 15 seconds, using 3D-printed prototypes and manufacturing drawings.",
@@ -338,7 +338,7 @@ export default function ExperiencePage() {
     <main className="container-page space-y-20 pt-32">
       <header className="content-width border-b border-border pb-14">
         <h1 className="text-[clamp(3.5rem,8vw,7rem)] font-semibold leading-[0.95] tracking-[-0.06em]">Experience</h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">A more complete view of my professional experience, research, leadership, awards, and technical work beyond the one-page resume.</p>
+        <p className="mt-6 max-w-3xl text-lg leading-8 text-foreground-secondary">A more complete view of my professional experience, research, leadership, awards, and technical work beyond my one-page resume.</p>
       </header>
 
       <div className="content-width space-y-20">

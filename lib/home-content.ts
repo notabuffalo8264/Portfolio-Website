@@ -2,7 +2,7 @@ export const homeContent = {
   experiencePreview: [
     {
       role: "Mechanical Engineering Intern",
-      org: "Grayhill · La Grange, IL",
+      org: "Grayhill, Inc. · La Grange, IL",
       dates: "May 2026 — August 2026",
     },
     {
